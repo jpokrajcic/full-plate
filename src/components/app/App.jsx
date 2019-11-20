@@ -5,7 +5,7 @@ import Posts from '../posts/Posts';
 import Dashboard from '../dashboard/Dashboard';
 import NoRoute from '../noRoute/NoRoute';
 import Login from '../login/Login';
-import routes from '../../services/routes';
+import routes from '../../router/routes';
 import Tasks from '../tasks/Tasks';
 import Navigation from '../navigation/Navigation';
 import Home from '../home/Home';
