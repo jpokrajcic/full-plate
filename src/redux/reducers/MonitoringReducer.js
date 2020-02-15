@@ -1,19 +1,19 @@
 import {
   GET_BUILDING_MONITORINGS,
   GET_BUILDING_MONITORINGS_SUCCESS,
-  GET_BUILDING_MONITORINGS_FAILED,
+  GET_BUILDING_MONITORINGS_FAILURE,
   CREATE_MONITORING,
   CREATE_MONITORING_SUCCESS,
-  CREATE_MONITORING_FAILED,
+  CREATE_MONITORING_FAILURE,
   UPDATE_MONITORING,
   UPDATE_MONITORING_SUCCESS,
-  UPDATE_MONITORING_FAILED,
+  UPDATE_MONITORING_FAILURE,
   DELETE_MONITORING,
   DELETE_MONITORING_SUCCESS,
-  DELETE_MONITORING_FAILED,
+  DELETE_MONITORING_FAILURE,
   GET_BUILDING_AND_CATEGORY_MONITORINGS,
   GET_BUILDING_AND_CATEGORY_MONITORINGS_SUCCESS,
-  GET_BUILDING_AND_CATEGORY_MONITORINGS_FAILED
+  GET_BUILDING_AND_CATEGORY_MONITORINGS_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -22,7 +22,7 @@ const initState = {
   selectedMonitoring: null
 };
 
-const monitoringReducer = (state = initState, action) => {
+const MonitoringReducer = (state = initState, action) => {
   switch (action.type) {
     // TODO vidi kako cu strukturirat monitorings polje i dal se treba razbit na vise polja
     case GET_BUILDING_MONITORINGS: {
@@ -38,7 +38,7 @@ const monitoringReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_MONITORINGS_FAILED: {
+    case GET_BUILDING_MONITORINGS_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -57,7 +57,7 @@ const monitoringReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_AND_CATEGORY_MONITORINGS_FAILED: {
+    case GET_BUILDING_AND_CATEGORY_MONITORINGS_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -76,7 +76,7 @@ const monitoringReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_MONITORING_FAILED: {
+    case CREATE_MONITORING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -100,7 +100,7 @@ const monitoringReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_MONITORING_FAILED: {
+    case UPDATE_MONITORING_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -121,7 +121,7 @@ const monitoringReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_MONITORING_FAILED: {
+    case DELETE_MONITORING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -133,4 +133,4 @@ const monitoringReducer = (state = initState, action) => {
   }
 };
 
-export default monitoringReducer;
+export default MonitoringReducer;

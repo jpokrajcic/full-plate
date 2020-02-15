@@ -1,16 +1,16 @@
 import {
   GET_BUILDING_MONITORING_CATEGORIES,
   GET_BUILDING_MONITORING_CATEGORIES_SUCCESS,
-  GET_BUILDING_MONITORING_CATEGORIES_FAILED,
+  GET_BUILDING_MONITORING_CATEGORIES_FAILURE,
   CREATE_MONITORING_CATEGORY,
   CREATE_MONITORING_CATEGORY_SUCCESS,
-  CREATE_MONITORING_CATEGORY_FAILED,
+  CREATE_MONITORING_CATEGORY_FAILURE,
   UPDATE_MONITORING_CATEGORY,
   UPDATE_MONITORING_CATEGORY_SUCCESS,
-  UPDATE_MONITORING_CATEGORY_FAILED,
+  UPDATE_MONITORING_CATEGORY_FAILURE,
   DELETE_MONITORING_CATEGORY,
   DELETE_MONITORING_CATEGORY_SUCCESS,
-  DELETE_MONITORING_CATEGORY_FAILED
+  DELETE_MONITORING_CATEGORY_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,7 @@ const initState = {
   selectedMonitoringCategory: null
 };
 
-const monitoringCategoryReducer = (state = initState, action) => {
+const MonitoringCategoryReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDING_MONITORING_CATEGORIES: {
       return {
@@ -34,7 +34,7 @@ const monitoringCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_MONITORING_CATEGORIES_FAILED: {
+    case GET_BUILDING_MONITORING_CATEGORIES_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -53,7 +53,7 @@ const monitoringCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_MONITORING_CATEGORY_FAILED: {
+    case CREATE_MONITORING_CATEGORY_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -79,7 +79,7 @@ const monitoringCategoryReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_MONITORING_CATEGORY_FAILED: {
+    case UPDATE_MONITORING_CATEGORY_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -100,7 +100,7 @@ const monitoringCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_MONITORING_CATEGORY_FAILED: {
+    case DELETE_MONITORING_CATEGORY_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -112,4 +112,4 @@ const monitoringCategoryReducer = (state = initState, action) => {
   }
 };
 
-export default monitoringCategoryReducer;
+export default MonitoringCategoryReducer;

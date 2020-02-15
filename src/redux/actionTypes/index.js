@@ -5,3 +5,4 @@ export * from './MessageActionTypes';
 export * from './MonitoringActionTypes';
 export * from './TaskCategoryActionTypes';
 export * from './MonitoringCategoryActionTypes';
+export * from './UserActionTypes';

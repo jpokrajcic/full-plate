@@ -1,16 +1,16 @@
 import {
   GET_BUILDINGS,
   GET_BUILDINGS_SUCCESS,
-  GET_BUILDINGS_FAILED,
+  GET_BUILDINGS_FAILURE,
   CREATE_BUILDING,
   CREATE_BUILDING_SUCCESS,
-  CREATE_BUILDING_FAILED,
+  CREATE_BUILDING_FAILURE,
   UPDATE_BUILDING,
   UPDATE_BUILDING_SUCCESS,
-  UPDATE_BUILDING_FAILED,
+  UPDATE_BUILDING_FAILURE,
   DELETE_BUILDING,
   DELETE_BUILDING_SUCCESS,
-  DELETE_BUILDING_FAILED
+  DELETE_BUILDING_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,7 @@ const initState = {
   selectedBuilding: null
 };
 
-const buildingReducer = (state = initState, action) => {
+const BuildingReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDINGS: {
       return {
@@ -34,7 +34,7 @@ const buildingReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDINGS_FAILED: {
+    case GET_BUILDINGS_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -53,7 +53,7 @@ const buildingReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_BUILDING_FAILED: {
+    case CREATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -77,7 +77,7 @@ const buildingReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_BUILDING_FAILED: {
+    case UPDATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -98,7 +98,7 @@ const buildingReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_BUILDING_FAILED: {
+    case DELETE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -110,4 +110,4 @@ const buildingReducer = (state = initState, action) => {
   }
 };
 
-export default buildingReducer;
+export default BuildingReducer;

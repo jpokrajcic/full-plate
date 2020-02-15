@@ -1,16 +1,16 @@
 import {
   GET_BUILDING_APARTMENTS,
   GET_BUILDING_APARTMENTS_SUCCESS,
-  GET_BUILDING_APARTMENTS_FAILED,
+  GET_BUILDING_APARTMENTS_FAILURE,
   CREATE_APARTMENT,
   CREATE_APARTMENT_SUCCESS,
-  CREATE_APARTMENT_FAILED,
+  CREATE_APARTMENT_FAILURE,
   UPDATE_APARTMENT,
   UPDATE_APARTMENT_SUCCESS,
-  UPDATE_APARTMENT_FAILED,
+  UPDATE_APARTMENT_FAILURE,
   DELETE_APARTMENT,
   DELETE_APARTMENT_SUCCESS,
-  DELETE_APARTMENT_FAILED
+  DELETE_APARTMENT_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,7 @@ const initState = {
   selectedApartment: null
 };
 
-const apartmentReducer = (state = initState, action) => {
+const ApartmentReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDING_APARTMENTS: {
       return {
@@ -34,7 +34,7 @@ const apartmentReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_APARTMENTS_FAILED: {
+    case GET_BUILDING_APARTMENTS_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -53,7 +53,7 @@ const apartmentReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_APARTMENT_FAILED: {
+    case CREATE_APARTMENT_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -77,7 +77,7 @@ const apartmentReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_APARTMENT_FAILED: {
+    case UPDATE_APARTMENT_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -98,7 +98,7 @@ const apartmentReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_APARTMENT_FAILED: {
+    case DELETE_APARTMENT_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -110,4 +110,4 @@ const apartmentReducer = (state = initState, action) => {
   }
 };
 
-export default apartmentReducer;
+export default ApartmentReducer;

@@ -1,16 +1,16 @@
 import {
   GET_BUILDING_MESSAGES,
   GET_BUILDING_MESSAGES_SUCCESS,
-  GET_BUILDING_MESSAGES_FAILED,
+  GET_BUILDING_MESSAGES_FAILURE,
   CREATE_MESSAGE,
   CREATE_MESSAGE_SUCCESS,
-  CREATE_MESSAGE_FAILED,
+  CREATE_MESSAGE_FAILURE,
   UPDATE_MESSAGE,
   UPDATE_MESSAGE_SUCCESS,
-  UPDATE_MESSAGE_FAILED,
+  UPDATE_MESSAGE_FAILURE,
   DELETE_MESSAGE,
   DELETE_MESSAGE_SUCCESS,
-  DELETE_MESSAGE_FAILED
+  DELETE_MESSAGE_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,7 @@ const initState = {
   selectedMessage: null
 };
 
-const messageReducer = (state = initState, action) => {
+const MessageReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDING_MESSAGES: {
       return {
@@ -34,7 +34,7 @@ const messageReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_MESSAGES_FAILED: {
+    case GET_BUILDING_MESSAGES_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -53,7 +53,7 @@ const messageReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_MESSAGE_FAILED: {
+    case CREATE_MESSAGE_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -77,7 +77,7 @@ const messageReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_MESSAGE_FAILED: {
+    case UPDATE_MESSAGE_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -96,7 +96,7 @@ const messageReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_MESSAGE_FAILED: {
+    case DELETE_MESSAGE_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -108,4 +108,4 @@ const messageReducer = (state = initState, action) => {
   }
 };
 
-export default messageReducer;
+export default MessageReducer;

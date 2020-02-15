@@ -1,16 +1,16 @@
 import {
   GET_BUILDING_TASKS,
   GET_BUILDING_TASKS_SUCCESS,
-  GET_BUILDING_TASKS_FAILED,
+  GET_BUILDING_TASKS_FAILURE,
   CREATE_TASK,
   CREATE_TASK_SUCCESS,
-  CREATE_TASK_FAILED,
+  CREATE_TASK_FAILURE,
   UPDATE_TASK,
   UPDATE_TASK_SUCCESS,
-  UPDATE_TASK_FAILED,
+  UPDATE_TASK_FAILURE,
   DELETE_TASK,
   DELETE_TASK_SUCCESS,
-  DELETE_TASK_FAILED
+  DELETE_TASK_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,7 @@ const initState = {
   selectedTask: null
 };
 
-const taskReducer = (state = initState, action) => {
+const TaskReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDING_TASKS: {
       return {
@@ -34,7 +34,7 @@ const taskReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_TASKS_FAILED: {
+    case GET_BUILDING_TASKS_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -53,7 +53,7 @@ const taskReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_TASK_FAILED: {
+    case CREATE_TASK_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -77,7 +77,7 @@ const taskReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_TASK_FAILED: {
+    case UPDATE_TASK_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -96,7 +96,7 @@ const taskReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_TASK_FAILED: {
+    case DELETE_TASK_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -108,4 +108,4 @@ const taskReducer = (state = initState, action) => {
   }
 };
 
-export default taskReducer;
+export default TaskReducer;

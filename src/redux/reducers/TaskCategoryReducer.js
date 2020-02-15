@@ -1,16 +1,16 @@
 import {
   GET_BUILDING_TASK_CATEGORIES,
   GET_BUILDING_TASK_CATEGORIES_SUCCESS,
-  GET_BUILDING_TASK_CATEGORIES_FAILED,
+  GET_BUILDING_TASK_CATEGORIES_FAILURE,
   CREATE_BUILDING,
   CREATE_BUILDING_SUCCESS,
-  CREATE_BUILDING_FAILED,
+  CREATE_BUILDING_FAILURE,
   UPDATE_BUILDING,
   UPDATE_BUILDING_SUCCESS,
-  UPDATE_BUILDING_FAILED,
+  UPDATE_BUILDING_FAILURE,
   DELETE_BUILDING,
   DELETE_BUILDING_SUCCESS,
-  DELETE_BUILDING_FAILED
+  DELETE_BUILDING_FAILURE
 } from '../actionTypes';
 
 const initState = {
@@ -18,7 +18,7 @@ const initState = {
   taskCategories: []
 };
 
-const taskCategoryReducer = (state = initState, action) => {
+const TaskCategoryReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_BUILDING_TASK_CATEGORIES: {
       return {
@@ -33,7 +33,7 @@ const taskCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case GET_BUILDING_TASK_CATEGORIES_FAILED: {
+    case GET_BUILDING_TASK_CATEGORIES_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -52,7 +52,7 @@ const taskCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_BUILDING_FAILED: {
+    case CREATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -76,7 +76,7 @@ const taskCategoryReducer = (state = initState, action) => {
         isLoading: true
       };
     }
-    case UPDATE_BUILDING_FAILED: {
+    case UPDATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: true
@@ -97,7 +97,7 @@ const taskCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case DELETE_BUILDING_FAILED: {
+    case DELETE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false
@@ -109,4 +109,4 @@ const taskCategoryReducer = (state = initState, action) => {
   }
 };
 
-export default taskCategoryReducer;
+export default TaskCategoryReducer;

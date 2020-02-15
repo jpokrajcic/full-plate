@@ -1,0 +1,50 @@
+const endpoints = {
+  urlBase: 'http://83.169.39.246:8080/webservices/rest/v1/admin/',
+  urlAnon: 'http://83.169.39.246:8080/webservices/rest/v1/anon/',
+  login: '/v1/anon/login',
+  logout: '/v1/anon/logout',
+  keepAlive: '/v1/anon/keepAlive',
+  getUserProfile: '/v1/anon/getUserProfile',
+  createBuilding: '/v1/user/createBuilding',
+  getBuildings: '/v1/user/getBuildings',
+  updateBuilding: '/v1/user/updateBuilding',
+  deleteBuilding: '/v1/user/deleteBuilding',
+  createApartment: '/v1/user/createApartment',
+  getApartments: '/v1/user/getApartments',
+  updateApartment: '/v1/user/updateApartment',
+  deleteApartment: '/v1/user/deleteApartment',
+  createTask: '/v1/user/createTask',
+  getTasks: '/v1/user/getTasks',
+  getBuildingTasks: '/v1/user/getTasksByBuildingId',
+  updateTask: '/v1/user/updateTask',
+  changeTaskStatus: '/v1/user/changeTaskStatus',
+  deleteTask: '/v1/user/deleteTask',
+  createMessage: '/v1/user/createMessage',
+  getBuildingMessages: '/v1/user/getBuildingMessages',
+  getApartmentMessages: '/v1/user/getApartmentMessages',
+  updateMessage: '/v1/user/updateMessage',
+  deleteMessage: '/v1/user/deleteMessage',
+  createMonitoring: '/v1/user/createMonitoring',
+  getBuildingMonitorings: '/v1/user/getBuildingMonitorings',
+  getBuildingMonitoringsByCategory: '/v1/user/getBuildingMonitoringsByCategory',
+  updateMonitoring: '/v1/user/updateMonitoring',
+  deleteMonitoring: '/v1/user/deleteMonitoring',
+  createTaskCategory: '/v1/user/createTaskCategory',
+  getTaskCategories: '/v1/user/getTaskCategories',
+  getBuildingTaskCategories: '/v1/user/getBuildingTaskCategories',
+  updateTaskCategory: '/v1/user/updateTaskCategory',
+  deleteTaskCategory: '/v1/user/deleteTaskCategory',
+  createMonitoringCategory: '/v1/user/createMonitoringCategory',
+  getMonitoringCategories: '/v1/user/getMonitoringCategories',
+  getBuildingMonitoringCategories: '/v1/user/getBuildingMonitoringCategories',
+  updateMonitoringCategory: '/v1/user/updateMonitoringCategory',
+  deleteMonitoringCategory: '/v1/user/deleteMonitoringCategory',
+  changePassword: '/api/v1/update_password', // !!!!not implemented on server side jet!!!!!
+  api:
+    process.env.NODE_ENV !== 'production'
+      ? 'http://localhost:8080/https://staging.seer.com'
+      : 'https://staging.seer.com',
+  appUrl: 'https://webstaging.seer.com'
+};
+
+export default endpoints;
