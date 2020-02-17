@@ -1,5 +1,5 @@
 // import {useHistory} from 'react-router-dom';
-import getSessionToken from '../getSessionToken';
+import getSessionToken from './getSessionToken';
 
 const headers = {
   Accept: 'application/json',
