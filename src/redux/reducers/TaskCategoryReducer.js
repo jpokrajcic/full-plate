@@ -1,4 +1,7 @@
 import {
+  GET_TASK_CATEGORIES,
+  GET_TASK_CATEGORIES_SUCCESS,
+  GET_TASK_CATEGORIES_FAILURE,
   GET_BUILDING_TASK_CATEGORIES,
   GET_BUILDING_TASK_CATEGORIES_SUCCESS,
   GET_BUILDING_TASK_CATEGORIES_FAILURE,
@@ -20,6 +23,25 @@ const initState = {
 
 const TaskCategoryReducer = (state = initState, action) => {
   switch (action.type) {
+    case GET_TASK_CATEGORIES: {
+      return {
+        ...state,
+        isLoading: true
+      };
+    }
+    case GET_TASK_CATEGORIES_SUCCESS: {
+      return {
+        ...state,
+        taskCategories: action.payload,
+        isLoading: false
+      };
+    }
+    case GET_TASK_CATEGORIES_FAILURE: {
+      return {
+        ...state,
+        isLoading: false
+      };
+    }
     case GET_BUILDING_TASK_CATEGORIES: {
       return {
         ...state,
@@ -29,7 +51,7 @@ const TaskCategoryReducer = (state = initState, action) => {
     case GET_BUILDING_TASK_CATEGORIES_SUCCESS: {
       return {
         ...state,
-        taskCategories: action.data,
+        taskCategories: action.payload,
         isLoading: false
       };
     }
@@ -48,7 +70,7 @@ const TaskCategoryReducer = (state = initState, action) => {
     case CREATE_BUILDING_SUCCESS: {
       return {
         ...state,
-        taskCategories: [...state.taskCategories, action.data],
+        taskCategories: [...state.taskCategories, action.payload],
         isLoading: false
       };
     }
@@ -68,8 +90,8 @@ const TaskCategoryReducer = (state = initState, action) => {
       return {
         ...state,
         taskCategories: state.taskCategories.map(building => {
-          if (building.id === action.data.id) {
-            return {...action.data};
+          if (building.id === action.payload.id) {
+            return {...action.payload};
           }
           return building;
         }),
@@ -92,7 +114,7 @@ const TaskCategoryReducer = (state = initState, action) => {
       return {
         ...state,
         taskCategories: state.taskCategories.filter(
-          building => building.id !== action.data
+          building => building.id !== action.payload
         ),
         isLoading: false
       };

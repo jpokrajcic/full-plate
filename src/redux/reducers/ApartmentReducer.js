@@ -15,6 +15,7 @@ import {
 
 const initState = {
   isLoading: true,
+  loaded: false,
   apartments: [],
   selectedApartment: null
 };
@@ -24,14 +25,16 @@ const ApartmentReducer = (state = initState, action) => {
     case GET_BUILDING_APARTMENTS: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loaded: false
       };
     }
     case GET_BUILDING_APARTMENTS_SUCCESS: {
       return {
         ...state,
-        apartments: action.data,
-        isLoading: false
+        apartments: action.payload,
+        isLoading: false,
+        loaded: true
       };
     }
     case GET_BUILDING_APARTMENTS_FAILURE: {
@@ -49,7 +52,7 @@ const ApartmentReducer = (state = initState, action) => {
     case CREATE_APARTMENT_SUCCESS: {
       return {
         ...state,
-        apartments: [...state.apartments, action.data],
+        apartments: [...state.apartments, action.payload],
         isLoading: false
       };
     }
@@ -69,8 +72,8 @@ const ApartmentReducer = (state = initState, action) => {
       return {
         ...state,
         apartments: state.apartments.map(apartment => {
-          if (apartment.id === action.data.id) {
-            return {...action.data};
+          if (apartment.id === action.payload.id) {
+            return {...action.payload};
           }
           return apartment;
         }),
@@ -93,7 +96,7 @@ const ApartmentReducer = (state = initState, action) => {
       return {
         ...state,
         apartments: state.apartments.filter(
-          apartment => apartment.id !== action.data
+          apartment => apartment.id !== action.payload
         ),
         isLoading: false
       };

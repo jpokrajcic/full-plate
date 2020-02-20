@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {ThemeProvider, CssBaseline} from '@material-ui/core';
 import Apartments from '../apartments/Apartments';
 import Posts from '../posts/Posts';
 import Dashboard from '../dashboard/Dashboard';
@@ -8,10 +9,11 @@ import Login from '../login/Login';
 import routes from '../../router/routes';
 import Tasks from '../tasks/Tasks';
 import Navigation from '../navigation/Navigation';
-import Home from '../home/Home';
-import {ThemeProvider, CssBaseline} from '@material-ui/core';
+import Buildings from '../buildings/Buildings';
 import AppTheme from './AppTheme';
 import Header from '../common/header/Header';
+import PrivateRoute from '../../router/PrivateRoute';
+import Home from '../home/Home';
 
 function App() {
   // constructor(props) {
@@ -107,29 +109,31 @@ function App() {
         <div>
           <Header />
           <Navigation />
+
           <Switch>
-            <Route path={routes.login}>
-              <Login />
-            </Route>
             <Route exact path={routes.home}>
               <Home />
             </Route>
-            <Route path={routes.tasks}>
-              <Tasks
-                tasks={tasks}
-                apartments={apartments}
-                taskCategories={taskCategories}
-              />
+            <Route exact path={routes.login}>
+              <Login />
             </Route>
-            <Route path={routes.apartments}>
+
+            <PrivateRoute exact path={routes.buildings}>
+              <Buildings />
+            </PrivateRoute>
+            <PrivateRoute path={`${routes.tasks}`}>
+              <Tasks />
+            </PrivateRoute>
+            <PrivateRoute path={routes.apartments}>
               <Apartments />
-            </Route>
-            <Route path={routes.posts}>
+            </PrivateRoute>
+            <PrivateRoute path={routes.posts}>
               <Posts />
-            </Route>
-            <Route path={routes.dashboard}>
+            </PrivateRoute>
+            <PrivateRoute path={routes.dashboard}>
               <Dashboard />
-            </Route>
+            </PrivateRoute>
+
             <Route>
               <NoRoute />
             </Route>

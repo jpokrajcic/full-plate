@@ -1,4 +1,7 @@
 import React, {useState, useRef} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
 import {
   TextField,
@@ -13,6 +16,11 @@ import {
   KeyboardDatePicker
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import classNames from 'classnames';
+import {
+  createTask,
+  updateTask
+} from '../../redux/actionCreators/TaskActionCreators';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,12 +34,27 @@ const useStyles = makeStyles(() => ({
   },
   buttonsContainer: {
     display: 'flex',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    width: '100%'
+  },
+  button: {
+    width: '50%',
+    margin: '0px 16px'
+  },
+  formItem: {
+    marginTop: '16px',
+    marginBottom: '16px'
   }
 }));
-const TaskEditor = props => {
-  console.log(props.task);
 
+function TaskEditor({
+  createTask,
+  updateTask,
+  task,
+  apartments,
+  taskCategories,
+  onCancel
+}) {
   const classes = useStyles();
 
   const categoryInputLabel = useRef(null);
@@ -46,11 +69,11 @@ const TaskEditor = props => {
     setApartmentLabelWidth(apartmentInputLabel.current.offsetWidth);
   }, []);
 
-  const [name, setName] = useState(props.task.name);
-  const [categoryId, setCategoryId] = useState(props.task.categoryId);
-  const [apartmentId, setApartmentId] = useState(props.task.apartmentId);
-  const [description, setDescription] = useState(props.task.description);
-  const [dueDate, setDueDate] = useState(props.task.dueDate);
+  const [name, setName] = useState(task.name);
+  const [categoryId, setCategoryId] = useState(task.taskCategoryId);
+  const [apartmentId, setApartmentId] = useState(task.apartmentId);
+  const [description, setDescription] = useState(task.description);
+  const [dueDate, setDueDate] = useState(task.dueDate);
 
   const nameChangeHandler = event => {
     setName(event.target.value);
@@ -73,114 +96,140 @@ const TaskEditor = props => {
   };
 
   const saveNewHandler = () => {
-    //props.onSave({id: 3, name: 'test', description: 'nesto'});
+    if (task.id > -1) {
+      //updateTask();
+    } else {
+      //createTask();
+    }
   };
 
   const cancelHandler = () => {
-    console.log('cancelHandler');
-    props.onCancel();
+    onCancel();
   };
 
-  if (props.task) {
-    return (
-      <div className={classes.root}>
-        <span>{props.task.id === -1 ? 'New task' : 'Edit task'}</span>
+  if (task === null || task === 'undefined') return null;
 
-        <form className={classes.formContainer}>
-          <TextField
-            label="Task name"
-            value={name}
-            type="text"
-            variant="outlined"
-            onChange={nameChangeHandler}
+  return (
+    <div className={classes.root}>
+      <span>{task.id === -1 ? 'New task' : 'Edit task'}</span>
+
+      <form className={classes.formContainer}>
+        <TextField
+          label="Task name"
+          value={name}
+          type="text"
+          variant="outlined"
+          onChange={nameChangeHandler}
+          className={classes.formItem}
+        />
+
+        <FormControl variant="outlined" className={classes.formItem}>
+          <InputLabel ref={categoryInputLabel} id="categoryOutlinedLabel">
+            Category
+          </InputLabel>
+          <Select
+            labelId="categoryOutlinedLabel"
+            id="categoryOutlinedSelect"
+            value={categoryId}
+            onChange={categoryChangeHandler}
+            labelWidth={categoryLabelWidth}
+          >
+            {taskCategories.map(category => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl variant="outlined" className={classes.formItem}>
+          <InputLabel ref={apartmentInputLabel} id="apartmentOutlinedLabel">
+            Apartment
+          </InputLabel>
+          <Select
+            labelId="apartmentOutlinedLabel"
+            value={apartmentId}
+            onChange={apartmentChangeHandler}
+            labelWidth={apartmentLabelWidth}
+          >
+            {apartments.map(apartment => (
+              <MenuItem key={apartment.id} value={apartment.id}>
+                {`${apartment.apartmentNumber} ${apartment.lastName}`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <TextField
+          label="Description"
+          value={description}
+          type="text"
+          variant="outlined"
+          multiline={true}
+          rows={5}
+          placeholder="Enter task description..."
+          onChange={descriptionChangeHandler}
+          className={classes.formItem}
+        />
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            autoOk
+            clearable
+            inputVariant="outlined"
+            format="dd/MM/yyyy"
+            id="date-picker-inline"
+            label="Due date"
+            value={dueDate}
+            onChange={dateChangeHandler}
+            InputAdornmentProps={{position: 'start'}}
+            className={classes.formItem}
           />
+        </MuiPickersUtilsProvider>
 
-          <FormControl variant="outlined">
-            <InputLabel ref={categoryInputLabel} id="categoryOutlinedLabel">
-              Category
-            </InputLabel>
-            <Select
-              labelId="categoryOutlinedLabel"
-              id="categoryOutlinedSelect"
-              value={categoryId}
-              onChange={categoryChangeHandler}
-              labelWidth={categoryLabelWidth}
-            >
-              {props.taskCategories.map(category => (
-                <MenuItem key={category.id} value={category.name}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+        <div className={classNames(classes.buttonsContainer, classes.formItem)}>
+          <Button
+            disableElevation
+            variant="contained"
+            color="primary"
+            onClick={saveNewHandler}
+            className={classes.button}
+          >
+            Save
+          </Button>
 
-          <FormControl variant="outlined">
-            <InputLabel ref={apartmentInputLabel} id="apartmentOutlinedLabel">
-              Apartment
-            </InputLabel>
-            <Select
-              labelId="apartmentOutlinedLabel"
-              value={apartmentId}
-              onChange={apartmentChangeHandler}
-              labelWidth={apartmentLabelWidth}
-            >
-              {props.apartments.map(apartment => (
-                <MenuItem key={apartment.id} value={apartment.id}>
-                  {`${apartment.number} ${apartment.firstName} ${apartment.lastName}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Button
+            disableElevation
+            variant="contained"
+            onClick={cancelHandler}
+            className={classes.button}
+          >
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
 
-          <TextField
-            label="Description"
-            value={description}
-            type="text"
-            variant="outlined"
-            multiline={true}
-            rows={5}
-            placeholder="Enter task description..."
-            onChange={descriptionChangeHandler}
-          />
-
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              autoOk
-              clearable
-              inputVariant="outlined"
-              format="dd/MM/yyyy"
-              id="date-picker-inline"
-              label="Due date"
-              value={dueDate}
-              onChange={dateChangeHandler}
-              InputAdornmentProps={{position: 'start'}}
-            />
-          </MuiPickersUtilsProvider>
-
-          <div className={classes.buttonsContainer}>
-            <Button
-              disableElevation
-              variant="contained"
-              color="primary"
-              onClick={saveNewHandler}
-            >
-              Save
-            </Button>
-
-            <Button
-              disableElevation
-              variant="contained"
-              onClick={cancelHandler}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </div>
-    );
-  } else {
-    return null;
-  }
+TaskEditor.propTypes = {
+  createTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  task: PropTypes.object.isRequired,
+  apartments: PropTypes.instanceOf(Array).isRequired,
+  taskCategories: PropTypes.instanceOf(Array).isRequired,
+  editorError: PropTypes.string
+};
+TaskEditor.defaultProps = {
+  editorError: ''
 };
 
-export default TaskEditor;
+const mapStateToProps = state => ({
+  editorError: state.taskReducer.editorError
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({createTask, updateTask}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskEditor);

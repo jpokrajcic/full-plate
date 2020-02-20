@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useParams} from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
 import {
   TextField,
@@ -19,7 +21,10 @@ import Add from '@material-ui/icons/Add';
 import TaskFilters from '../../enum/TaskFilters';
 import TaskEditor from './TaskEditor';
 import TaskIconSelector from './TaskIconSelector';
-import {createTask} from '../../redux/actionCreators';
+import {getBuildingTasks} from '../../redux/actionCreators/TaskActionCreators';
+import {getTaskCategories} from '../../redux/actionCreators/TaskCategoryActionCreators';
+import {getBuildingApartments} from '../../redux/actionCreators/ApartmentActionCreators';
+import {useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -39,24 +44,42 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Tasks(props) {
-  const {addTask} = props;
-
-  const [tasks, setTasks] = useState(props.tasks);
-  const [taskCategories, setTaskCategories] = useState(props.taskCategories);
-  const [apartments, setApartments] = useState(props.apartments);
+function Tasks({
+  getBuildingTasks,
+  getTaskCategories,
+  getBuildingApartments,
+  tasks,
+  taskCategories,
+  apartments,
+  tasksLoaded,
+  taskCategoriesLoaded,
+  apartmentsLoaded,
+  loadingError
+}) {
+  const [displayTasks, setDisplayTasks] = useState(tasks);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState(TaskFilters.ALL);
   const [selectedTask, setSelectedTask] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const classes = useStyles();
+  const {buildingId} = useLocation().state;
+
+  useEffect(() => {
+    getBuildingTasks({buildingId});
+    getTaskCategories();
+    getBuildingApartments({buildingId});
+  }, []);
+
+  useEffect(() => {
+    setDisplayTasks(tasks);
+  }, [tasks]);
 
   const applyFilterAndSearch = (searchValue, filterValue) => {
     let newList = [];
 
     if (searchValue !== '') {
-      newList = props.tasks.filter(task => {
+      newList = tasks.filter(task => {
         const lowerCaseTask = task.name.toLowerCase();
         const lowerCaseSearch = searchValue.toLowerCase();
 
@@ -68,7 +91,7 @@ function Tasks(props) {
         );
       });
     } else {
-      newList = props.tasks.filter(task => {
+      newList = tasks.filter(task => {
         return (
           filterValue === TaskFilters.ALL ||
           (filterValue === TaskFilters.COMPLETE && task.done) ||
@@ -77,7 +100,7 @@ function Tasks(props) {
       });
     }
 
-    setTasks(newList);
+    setDisplayTasks(newList);
   };
 
   const handleSearchChanges = event => {
@@ -110,7 +133,7 @@ function Tasks(props) {
   };
 
   const addNewHandler = () => {
-    let newTask = {
+    const newTask = {
       id: -1,
       name: '',
       description: '',
@@ -123,8 +146,12 @@ function Tasks(props) {
   };
 
   const saveHandler = task => {
-    addTask(task);
+    //addTask(task);
   };
+
+  if (tasksLoaded || taskCategoriesLoaded || apartmentsLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={classes.root}>
@@ -180,7 +207,7 @@ function Tasks(props) {
       </div>
 
       <List>
-        {tasks.map(task => (
+        {displayTasks.map(task => (
           <ListItem
             button
             divider
@@ -188,7 +215,7 @@ function Tasks(props) {
             onClick={event => handleListSelection(event, task)}
           >
             <ListItemIcon>
-              <TaskIconSelector categoryId={task.categoryId} />
+              <TaskIconSelector categoryId={task.taskCategoryId} />
             </ListItemIcon>
             <ListItemText primary={task.name} secondary={task.description} />
             <ListItemSecondaryAction>
@@ -214,12 +241,36 @@ function Tasks(props) {
   );
 }
 
+Tasks.propTypes = {
+  getBuildingTasks: PropTypes.func.isRequired,
+  getTaskCategories: PropTypes.func.isRequired,
+  getBuildingApartments: PropTypes.func.isRequired,
+  tasks: PropTypes.instanceOf(Array).isRequired,
+  taskCategories: PropTypes.instanceOf(Array).isRequired,
+  apartments: PropTypes.instanceOf(Array).isRequired,
+  loadingError: PropTypes.string,
+  tasksLoaded: PropTypes.bool.isRequired,
+  taskCategoriesLoaded: PropTypes.bool.isRequired,
+  apartmentsLoaded: PropTypes.bool.isRequired
+};
+Tasks.defaultProps = {
+  loadingError: ''
+};
+
 const mapStateToProps = state => ({
-  //tasks: state.tasks
+  tasks: state.taskReducer.tasks,
+  taskCategories: state.taskCategoryReducer.taskCategories,
+  apartments: state.apartmentReducer.apartments,
+  loadingError: state.taskReducer.loadingError,
+  tasksLoaded: state.taskReducer.isLoading,
+  taskCategoriesLoaded: state.taskCategoryReducer.isLoading,
+  apartmentsLoaded: state.apartmentReducer.isLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  addTask: task => dispatch(createTask(task))
-});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {getBuildingTasks, getTaskCategories, getBuildingApartments},
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tasks);

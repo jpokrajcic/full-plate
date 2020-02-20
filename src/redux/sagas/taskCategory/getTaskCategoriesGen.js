@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/TaskCategoryActionCreators';
 import getTaskCategories from '../../../services/taskCategory/getTaskCategories';
 
-function* getTaskCategoriesGen({payload: {data}}) {
+function* getTaskCategoriesGen() {
   try {
-    const tasks = yield call(getTaskCategories, data);
+    const tasks = yield call(getTaskCategories);
     yield put(getTaskCategoriesSuccess(tasks));
   } catch (error) {
     yield put(getTaskCategoriesFailed(error));

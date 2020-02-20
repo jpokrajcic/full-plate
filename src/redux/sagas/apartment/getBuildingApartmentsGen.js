@@ -5,9 +5,9 @@ import {
   getBuildingApartmentsFailed
 } from '../../actionCreators/ApartmentActionCreators';
 
-function* getBuildingApartmentsGen({payload: {data}}) {
+function* getBuildingApartmentsGen({payload}) {
   try {
-    const apartments = yield call(getBuildingApartments, data);
+    const apartments = yield call(getBuildingApartments, payload);
     yield put(getBuildingApartmentsSuccess(apartments));
   } catch (error) {
     yield put(getBuildingApartmentsFailed(error));

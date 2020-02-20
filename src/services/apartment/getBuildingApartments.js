@@ -3,7 +3,7 @@ import retrieveData from '../retrieveData';
 
 export default async buildingId => {
   const response = await retrieveData({
-    url: endpoints.urlBase + endpoints.getBuildingApartments,
+    url: endpoints.urlBase + endpoints.getApartments,
     method: 'POST',
     body: buildingId
   });

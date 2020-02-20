@@ -30,7 +30,7 @@ const MessageReducer = (state = initState, action) => {
     case GET_BUILDING_MESSAGES_SUCCESS: {
       return {
         ...state,
-        messages: action.data,
+        messages: action.payload,
         isLoading: false
       };
     }
@@ -49,7 +49,7 @@ const MessageReducer = (state = initState, action) => {
     case CREATE_MESSAGE_SUCCESS: {
       return {
         ...state,
-        messages: [...state.messages, action.data],
+        messages: [...state.messages, action.payload],
         isLoading: false
       };
     }
@@ -69,8 +69,8 @@ const MessageReducer = (state = initState, action) => {
       return {
         ...state,
         messages: state.messages.map(message => {
-          if (message.id === action.data.id) {
-            return {...action.data};
+          if (message.id === action.payload.id) {
+            return {...action.payload};
           }
           return message;
         }),
@@ -92,7 +92,9 @@ const MessageReducer = (state = initState, action) => {
     case DELETE_MESSAGE_SUCCESS: {
       return {
         ...state,
-        messages: state.messages.filter(message => message.id !== action.data),
+        messages: state.messages.filter(
+          message => message.id !== action.payload
+        ),
         isLoading: false
       };
     }

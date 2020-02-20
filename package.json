@@ -9,6 +9,7 @@
     "@material-ui/lab": "^4.0.0-alpha.42",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.9.0",
+    "classnames": "^2.2.6",
     "date-fns": "^2.9.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",

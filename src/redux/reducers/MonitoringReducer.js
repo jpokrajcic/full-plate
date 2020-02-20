@@ -34,7 +34,7 @@ const MonitoringReducer = (state = initState, action) => {
     case GET_BUILDING_MONITORINGS_SUCCESS: {
       return {
         ...state,
-        monitorings: action.data,
+        monitorings: action.payload,
         isLoading: false
       };
     }
@@ -53,7 +53,7 @@ const MonitoringReducer = (state = initState, action) => {
     case GET_BUILDING_AND_CATEGORY_MONITORINGS_SUCCESS: {
       return {
         ...state,
-        monitorings: action.data,
+        monitorings: action.payload,
         isLoading: false
       };
     }
@@ -72,7 +72,7 @@ const MonitoringReducer = (state = initState, action) => {
     case CREATE_MONITORING_SUCCESS: {
       return {
         ...state,
-        monitorings: [...state.monitorings, action.data],
+        monitorings: [...state.monitorings, action.payload],
         isLoading: false
       };
     }
@@ -92,8 +92,8 @@ const MonitoringReducer = (state = initState, action) => {
       return {
         ...state,
         monitorings: state.monitorings.map(monitoring => {
-          if (monitoring.id === action.data.id) {
-            return {...action.data};
+          if (monitoring.id === action.payload.id) {
+            return {...action.payload};
           }
           return monitoring;
         }),
@@ -116,7 +116,7 @@ const MonitoringReducer = (state = initState, action) => {
       return {
         ...state,
         monitorings: state.monitorings.filter(
-          monitoring => monitoring.id !== action.data
+          monitoring => monitoring.id !== action.payload
         ),
         isLoading: false
       };

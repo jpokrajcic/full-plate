@@ -34,9 +34,9 @@ function Header() {
   const classes = useStyles();
 
   const history = useHistory();
-  
+
   const goToHomeHandler = () => {
-    history.push(routes.home);
+    history.push(routes.buildings);
   };
 
   return (

@@ -30,7 +30,7 @@ const MonitoringCategoryReducer = (state = initState, action) => {
     case GET_BUILDING_MONITORING_CATEGORIES_SUCCESS: {
       return {
         ...state,
-        monitoringCategories: action.data,
+        monitoringCategories: action.payload,
         isLoading: false
       };
     }
@@ -49,7 +49,7 @@ const MonitoringCategoryReducer = (state = initState, action) => {
     case CREATE_MONITORING_CATEGORY_SUCCESS: {
       return {
         ...state,
-        monitoringCategories: [...state.monitoringCategories, action.data],
+        monitoringCategories: [...state.monitoringCategories, action.payload],
         isLoading: false
       };
     }
@@ -70,8 +70,8 @@ const MonitoringCategoryReducer = (state = initState, action) => {
         ...state,
         monitoringCategories: state.monitoringCategories.map(
           monitoringCategory => {
-            if (monitoringCategory.id === action.data.id) {
-              return {...action.data};
+            if (monitoringCategory.id === action.payload.id) {
+              return {...action.payload};
             }
             return monitoringCategory;
           }
@@ -95,7 +95,7 @@ const MonitoringCategoryReducer = (state = initState, action) => {
       return {
         ...state,
         monitoringCategories: state.monitoringCategories.filter(
-          monitoringCategory => monitoringCategory.id !== action.data
+          monitoringCategory => monitoringCategory.id !== action.payload
         ),
         isLoading: false
       };

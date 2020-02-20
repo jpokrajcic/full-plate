@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core';
 import routes from '../../router/routes';
 
@@ -9,8 +9,24 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     padding: theme.spacing(2)
   },
+  // link: {
+  //   textDecoration: 'none',
+  //   color: theme.palette.primaryLight
+  // },
+  // activeLink: {
+  //   textDecoration: 'none',
+  //   color: theme.palette.secondary
+  // },
   link: {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    fontSize: '16px',
+    '&.active': {
+      textDecoration: 'none',
+      color: theme.palette.primary.dark,
+      fontWeight: 'bold',
+      fontSize: '18px'
+    }
   }
 }));
 
@@ -18,30 +34,31 @@ function Navigation() {
   const classes = useStyles();
   const location = useLocation();
 
-  if (location.pathname === routes.home || location.pathname === routes.login) {
+  if (
+    location.pathname === routes.login ||
+    location.pathname === routes.home ||
+    location.pathname === routes.buildings
+  ) {
     return null;
   }
 
   return (
     <div className={classes.root}>
-      <Link to={routes.home} className={classes.link}>
-        Home
-      </Link>
-      <Link to={routes.tasks} className={classes.link}>
+      <NavLink to={routes.buildings} className={classes.link}>
+        Buildings
+      </NavLink>
+      <NavLink to={routes.tasks} className={classes.link}>
         Tasks
-      </Link>
-      <Link to={routes.apartments} className={classes.link}>
+      </NavLink>
+      <NavLink to={routes.apartments} className={classes.link}>
         Apartments
-      </Link>
-      <Link to={routes.posts} className={classes.link}>
+      </NavLink>
+      <NavLink to={routes.posts} className={classes.link}>
         Posts
-      </Link>
-      <Link to={routes.dashboard} className={classes.link}>
+      </NavLink>
+      <NavLink to={routes.dashboard} className={classes.link}>
         Dashboard
-      </Link>
-      <Link to={routes.login} className={classes.link}>
-        Log out
-      </Link>
+      </NavLink>
     </div>
   );
 }

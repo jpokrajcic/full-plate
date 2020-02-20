@@ -14,7 +14,7 @@ import {
 } from '../actionTypes';
 
 export const getBuildings = data => {
-  return {type: GET_BUILDINGS, payload: data};
+  return {type: GET_BUILDINGS, payload: {data}};
 };
 
 export const getBuildingsSuccess = data => {

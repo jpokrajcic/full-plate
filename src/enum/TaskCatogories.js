@@ -1,8 +1,11 @@
 const TaskCategories = {
-  ELECTRICITY: 1,
-  PAINT: 2,
-  PLUMBING: 3,
-  SECURITY: 4
+  GENERAL: 1,
+  PLUMBING: 2,
+  ELECTRICITY: 3,
+  PAINT: 4,
+  SECURITY: 5,
+  GLASS: 6,
+  INTERNET: 7
 };
 
 export default TaskCategories;

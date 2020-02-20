@@ -16,7 +16,10 @@ import {
 const initState = {
   isLoading: true,
   buildings: [],
-  selectedBuilding: null
+  selectedBuilding: null,
+  loadingError: '',
+  editorError: '',
+  deletionError: ''
 };
 
 const BuildingReducer = (state = initState, action) => {
@@ -30,14 +33,15 @@ const BuildingReducer = (state = initState, action) => {
     case GET_BUILDINGS_SUCCESS: {
       return {
         ...state,
-        buildings: action.data,
+        buildings: action.payload,
         isLoading: false
       };
     }
     case GET_BUILDINGS_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        loadingError: action.payload.error
       };
     }
     case CREATE_BUILDING: {
@@ -49,14 +53,15 @@ const BuildingReducer = (state = initState, action) => {
     case CREATE_BUILDING_SUCCESS: {
       return {
         ...state,
-        buildings: [...state.buildings, action.data],
+        buildings: [...state.buildings, action.payload],
         isLoading: false
       };
     }
     case CREATE_BUILDING_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        editorError: action.payload.error
       };
     }
     case UPDATE_BUILDING: {
@@ -69,8 +74,8 @@ const BuildingReducer = (state = initState, action) => {
       return {
         ...state,
         buildings: state.buildings.map(building => {
-          if (building.id === action.data.id) {
-            return {...action.data};
+          if (building.id === action.payload.id) {
+            return {...action.payload};
           }
           return building;
         }),
@@ -80,7 +85,8 @@ const BuildingReducer = (state = initState, action) => {
     case UPDATE_BUILDING_FAILURE: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        editorError: action.payload.error
       };
     }
     case DELETE_BUILDING: {
@@ -93,7 +99,7 @@ const BuildingReducer = (state = initState, action) => {
       return {
         ...state,
         buildings: state.buildings.filter(
-          building => building.id !== action.data
+          building => building.id !== action.payload
         ),
         isLoading: false
       };
@@ -101,7 +107,8 @@ const BuildingReducer = (state = initState, action) => {
     case DELETE_BUILDING_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        deletionError: action.payload.error
       };
     }
     default: {

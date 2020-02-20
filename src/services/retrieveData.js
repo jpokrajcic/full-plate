@@ -6,7 +6,7 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-export default async ({url, method, body}) => {
+export default async ({url, method, body, includeSessionToken = true}) => {
   // console.log('Retrieve data: ', {url, method, body});
   if (!url || !method || !body)
     throw new Error('/global/retreveData -> url, method or body null !');
@@ -19,7 +19,12 @@ export default async ({url, method, body}) => {
     if (resp && resp.sessionToken && typeof resp.sessionToken !== 'undefined')
       sessionToken = {...resp};
 
-    const sendBody = {...body, ...sessionToken};
+    let sendBody;
+    if (includeSessionToken) {
+      sendBody = {...body, ...sessionToken};
+    } else {
+      sendBody = {...body};
+    }
 
     const response = await fetch(url, {
       method,
@@ -48,6 +53,7 @@ export default async ({url, method, body}) => {
       // console.log('Response status issue: ', responseJson);
       throw new Error(responseJson.message);
     }
+    console.log('SUCCESS', responseJson.data);
     return responseJson.data;
   } catch (error) {
     console.log('Server communication issue: ', error);

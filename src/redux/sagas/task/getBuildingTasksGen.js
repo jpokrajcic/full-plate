@@ -5,9 +5,9 @@ import {
   getBuildingTasksFailed
 } from '../../actionCreators/TaskActionCreators';
 
-function* getBuildingTasksGen({payload: {data}}) {
+function* getBuildingTasksGen({payload}) {
   try {
-    const tasks = yield call(getBuildingTasks, data);
+    const tasks = yield call(getBuildingTasks, payload);
     yield put(getBuildingTasksSuccess(tasks));
   } catch (error) {
     yield put(getBuildingTasksFailed(error));

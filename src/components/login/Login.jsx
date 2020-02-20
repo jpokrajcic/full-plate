@@ -1,91 +1,121 @@
-import React, {useState}  from 'react';
-import { Container, Avatar, Typography, TextField, Button } from '@material-ui/core';
+import React, {useState, useEffect} from 'react';
+import {
+  Container,
+  Avatar,
+  Typography,
+  TextField,
+  Button
+} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles } from '@material-ui/styles';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {makeStyles} from '@material-ui/styles';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { authorize } from '../../redux/actionCreators/UserActionCreators';
+import {useLocation, Redirect, useHistory} from 'react-router-dom';
+import {authorize} from '../../redux/actionCreators/UserActionCreators';
+import routes from '../../router/routes';
 
-const useStyles = makeStyles (theme => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.main
   },
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    margin: theme.spacing(3, 0, 2)
+  }
 }));
 
-function Login(props) {
+function Login({authorize, isAuthenticated, error}) {
   const classes = useStyles();
 
   const [username, setUsername] = useState('');
-  const [password, setPassword]  = useState('');
+  const [password, setPassword] = useState('');
+  const [redirectedFrom, setRedirectedFrom] = useState(null);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    props.authorize({username, password});
-  }
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => {
+    //localStorage.removeItem('token');
+  }, []);
 
-  const handleInputChange = (event) => {
-    if(event.target.name === 'username') {
-      setUsername(event.target.value);
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('LOGIN isAuthenticated');
+      const {from} = location.state || {pathname: routes.buildings};
+      history.replace({
+        pathname: routes.buildings
+      });
     }
-    else if (event.target.name === 'password') {
+  }, [isAuthenticated]);
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    authorize({username, password});
+  };
+
+  const handleInputChange = event => {
+    if (event.target.name === 'username') {
+      setUsername(event.target.value);
+    } else if (event.target.name === 'password') {
       setPassword(event.target.value);
     }
-  }
+  };
+
+  // if (isAuthenticated && hasRedirected === false) {
+  //   setHasRedirected(true);
+  //   console.log('LOGIN isAuthenticated');
+  //   const {from} = location.state || {pathname: routes.buildings};
+  //   history.replace(from);
+  // }
 
   return (
-    <Container component="main" maxWidth='xs'>
+    <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1'>
-          Log in
-        </Typography>
+        <Typography component="h1">Log in</Typography>
         <form className={classes.form}>
           <TextField
-            id='username'
-            variant='outlined'
-            margin='normal'
+            id="username"
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            label='Username'
-            name='username'
-            autoFocus 
-            autoComplete='off'
+            label="Username"
+            name="username"
+            autoFocus
+            autoComplete="off"
             onChange={handleInputChange}
           />
           <TextField
-            id='password'
-            variant='outlined'
-            margin='normal'
+            id="password"
+            variant="outlined"
+            margin="normal"
             required
             fullWidth
-            label='Password'
-            name='password'
-            type='password'
+            label="Password"
+            name="password"
+            type="password"
             onChange={handleInputChange}
-          />  
-          <Button 
+          />
+          <Button
             className={classes.submit}
-            type='submit'
+            type="submit"
             fullWidth
-            color='primary'
-            variant='contained'
+            color="primary"
+            variant="contained"
             onClick={handleSubmit}
           >
             Log in
@@ -93,27 +123,23 @@ function Login(props) {
         </form>
       </div>
     </Container>
-  )
+  );
 }
 
 Login.propTypes = {
   authorize: PropTypes.func.isRequired,
-  token: PropTypes.string,
+  isAuthenticated: PropTypes.bool.isRequired,
   error: PropTypes.string
-}
+};
 Login.defaultProps = {
-  token: '',
   error: ''
 };
 
 const mapStateToProps = state => ({
-  token: state.userReducer.sessionToken,
+  isAuthenticated: state.userReducer.isAuthenticated,
   error: state.userReducer.error
 });
-const mapDispatchToProps = dispatch => bindActionCreators({authorize}, dispatch);
-
-// const mapDispatchToProps = dispatch => ({
-//   authorise: (username, password) => dispatch({type:'AUTH_REQUEST', payload: {username, password}}),
-// });
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({authorize}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

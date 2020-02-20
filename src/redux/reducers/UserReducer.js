@@ -16,8 +16,9 @@ import {
 const initState = {
   isLoading: true,
   sessionToken: null,
+  isAuthenticated: false,
   userProfile: {},
-  error: null
+  error: ''
 };
 
 const UserReducer = (state = initState, action) => {
@@ -31,6 +32,7 @@ const UserReducer = (state = initState, action) => {
     case AUTH_SUCCESS: {
       return {
         ...state,
+        isAuthenticated: true,
         sessionToken: action.payload,
         isLoading: false
       };
@@ -39,7 +41,7 @@ const UserReducer = (state = initState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: action.payload
+        error: action.payload.error
       };
     }
     case AUTH_LOGOUT: {
