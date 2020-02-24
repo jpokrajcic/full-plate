@@ -45,14 +45,9 @@ function Login({authorize, isAuthenticated, error}) {
 
   const location = useLocation();
   const history = useHistory();
-  useEffect(() => {
-    //localStorage.removeItem('token');
-  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log('LOGIN isAuthenticated');
-      const {from} = location.state || {pathname: routes.buildings};
       history.replace({
         pathname: routes.buildings
       });
@@ -71,13 +66,6 @@ function Login({authorize, isAuthenticated, error}) {
       setPassword(event.target.value);
     }
   };
-
-  // if (isAuthenticated && hasRedirected === false) {
-  //   setHasRedirected(true);
-  //   console.log('LOGIN isAuthenticated');
-  //   const {from} = location.state || {pathname: routes.buildings};
-  //   history.replace(from);
-  // }
 
   return (
     <Container component="main" maxWidth="xs">

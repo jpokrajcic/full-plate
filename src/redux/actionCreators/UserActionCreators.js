@@ -15,7 +15,7 @@ import {
 
 export const authorize = data => ({
   type: AUTH_REQUEST,
-  payload: {data}
+  payload: data
 });
 
 export const authorizeSuccess = data => {

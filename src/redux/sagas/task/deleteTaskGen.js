@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/TaskActionCreators';
 import deleteTask from '../../../services/task/deleteTask';
 
-function* deleteTaskGen({payload: {data}}) {
+function* deleteTaskGen({payload}) {
   try {
-    const deletedTaskId = yield call(deleteTask, {data});
+    const deletedTaskId = yield call(deleteTask, payload);
     yield put(deleteTaskSuccess(deletedTaskId));
   } catch (error) {
     yield put(deleteTaskFailed(error));

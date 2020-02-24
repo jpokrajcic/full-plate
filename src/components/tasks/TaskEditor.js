@@ -1,31 +1,43 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
+import {useSnackbar} from 'notistack';
 import {
   TextField,
   FormControl,
+  FormControlLabel,
   InputLabel,
   Select,
   MenuItem,
-  Button
+  Button,
+  Checkbox
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from '@material-ui/pickers';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 import DateFnsUtils from '@date-io/date-fns';
 import classNames from 'classnames';
 import {
   createTask,
-  updateTask
+  updateTask,
+  deleteTask
 } from '../../redux/actionCreators/TaskActionCreators';
 
 const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: '16px'
+  },
+  title: {
+    fontSize: '16px',
+    fontWeight: 'bold'
   },
   formContainer: {
     display: 'flex',
@@ -44,43 +56,66 @@ const useStyles = makeStyles(() => ({
   formItem: {
     marginTop: '16px',
     marginBottom: '16px'
+  },
+  errorMessage: {
+    fontSize: '16px',
+    color: 'rgb(255,0,0)',
+    width: '100%',
+    textAlign: 'center'
   }
 }));
 
 function TaskEditor({
   createTask,
   updateTask,
+  deleteTask,
   task,
   apartments,
   taskCategories,
-  onCancel
+  onCancel,
+  createError,
+  updateError,
+  deleteError
 }) {
   const classes = useStyles();
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
   const categoryInputLabel = useRef(null);
-  const [categoryLabelWidth, setCategoryLabelWidth] = useState(0);
-  React.useEffect(() => {
-    setCategoryLabelWidth(categoryInputLabel.current.offsetWidth);
-  }, []);
-
   const apartmentInputLabel = useRef(null);
+  const [categoryLabelWidth, setCategoryLabelWidth] = useState(0);
   const [apartmentLabelWidth, setApartmentLabelWidth] = useState(0);
-  React.useEffect(() => {
-    setApartmentLabelWidth(apartmentInputLabel.current.offsetWidth);
+  const [name, setName] = useState(task ? task.name : '');
+  const [taskCategoryId, setTaskCategoryId] = useState(
+    task ? task.taskCategoryId : ''
+  );
+  const [apartmentId, setApartmentId] = useState(task ? task.apartmentId : '');
+  const [description, setDescription] = useState(task ? task.description : '');
+  const [dueDate, setDueDate] = useState(task ? task.dueDate : null);
+  const [completed, setCompleted] = useState(task ? task.done : false);
+  //
+  useEffect(() => {
+    if (categoryInputLabel !== null && categoryInputLabel.current !== null)
+      setCategoryLabelWidth(categoryInputLabel.current.offsetWidth);
+    if (apartmentInputLabel !== null && apartmentInputLabel.current !== null)
+      setApartmentLabelWidth(apartmentInputLabel.current.offsetWidth);
   }, []);
 
-  const [name, setName] = useState(task.name);
-  const [categoryId, setCategoryId] = useState(task.taskCategoryId);
-  const [apartmentId, setApartmentId] = useState(task.apartmentId);
-  const [description, setDescription] = useState(task.description);
-  const [dueDate, setDueDate] = useState(task.dueDate);
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (createError !== '')
+      enqueueSnackbar('Failed to create task!', {variant: 'error'});
+    if (updateError !== '')
+      enqueueSnackbar('Failed to update task!', {variant: 'error'});
+    if (deleteError !== '')
+      enqueueSnackbar('Failed to delete task!', {variant: 'error'});
+  }, [createError, updateError, deleteError]);
 
   const nameChangeHandler = event => {
     setName(event.target.value);
   };
 
   const categoryChangeHandler = event => {
-    setCategoryId(event.target.value);
+    setTaskCategoryId(event.target.value);
   };
 
   const apartmentChangeHandler = event => {
@@ -95,23 +130,49 @@ function TaskEditor({
     setDueDate(date);
   };
 
-  const saveNewHandler = () => {
-    if (task.id > -1) {
-      //updateTask();
+  const completionChangeHandler = event => {
+    setCompleted(event.target.checked);
+  };
+
+  const saveHandler = () => {
+    closeSnackbar();
+
+    const taskData = {
+      id: task.id,
+      buildingId: task.buildingId,
+      apartmentId,
+      taskCategoryId,
+      name,
+      description,
+      done: completed,
+      dueDate
+    };
+
+    if (taskData.id > -1) {
+      updateTask({task: taskData});
     } else {
-      //createTask();
+      createTask({task: taskData});
     }
   };
 
   const cancelHandler = () => {
+    closeSnackbar();
+
     onCancel();
   };
 
+  const deleteHandler = () => {
+    deleteTask({id: task.id});
+  };
+
+  // Display blank editor if task is missing
   if (task === null || task === 'undefined') return null;
 
   return (
     <div className={classes.root}>
-      <span>{task.id === -1 ? 'New task' : 'Edit task'}</span>
+      <span className={classes.title}>
+        {task.id === -1 ? 'New task' : 'Edit task'}
+      </span>
 
       <form className={classes.formContainer}>
         <TextField
@@ -130,7 +191,7 @@ function TaskEditor({
           <Select
             labelId="categoryOutlinedLabel"
             id="categoryOutlinedSelect"
-            value={categoryId}
+            value={taskCategoryId}
             onChange={categoryChangeHandler}
             labelWidth={categoryLabelWidth}
           >
@@ -165,7 +226,7 @@ function TaskEditor({
           value={description}
           type="text"
           variant="outlined"
-          multiline={true}
+          multiline
           rows={5}
           placeholder="Enter task description..."
           onChange={descriptionChangeHandler}
@@ -187,13 +248,26 @@ function TaskEditor({
           />
         </MuiPickersUtilsProvider>
 
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={completed}
+              onChange={completionChangeHandler}
+              value="completed"
+              color="primary"
+            />
+          }
+          label="Completed"
+        />
+
         <div className={classNames(classes.buttonsContainer, classes.formItem)}>
           <Button
             disableElevation
             variant="contained"
             color="primary"
-            onClick={saveNewHandler}
+            onClick={saveHandler}
             className={classes.button}
+            startIcon={<SaveIcon />}
           >
             Save
           </Button>
@@ -206,6 +280,17 @@ function TaskEditor({
           >
             Cancel
           </Button>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={deleteHandler}
+            className={classes.button}
+            startIcon={<DeleteIcon />}
+            disabled={task.id === -1}
+          >
+            Delete
+          </Button>
         </div>
       </form>
     </div>
@@ -215,21 +300,37 @@ function TaskEditor({
 TaskEditor.propTypes = {
   createTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  task: PropTypes.object.isRequired,
+  task: PropTypes.shape({
+    id: PropTypes.number,
+    buildingId: PropTypes.number,
+    apartmentId: PropTypes.number,
+    taskCategoryId: PropTypes.number,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    done: PropTypes.bool,
+    dueDate: PropTypes.string
+  }),
   apartments: PropTypes.instanceOf(Array).isRequired,
   taskCategories: PropTypes.instanceOf(Array).isRequired,
-  editorError: PropTypes.string
+  createError: PropTypes.string,
+  updateError: PropTypes.string,
+  deleteError: PropTypes.string
 };
 TaskEditor.defaultProps = {
-  editorError: ''
+  createError: '',
+  updateError: '',
+  deleteError: ''
 };
 
 const mapStateToProps = state => ({
-  editorError: state.taskReducer.editorError
+  createError: state.taskReducer.createError,
+  updateError: state.taskReducer.updateError,
+  deleteError: state.taskReducer.deleteError
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({createTask, updateTask}, dispatch);
+  bindActionCreators({createTask, updateTask, deleteTask}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskEditor);

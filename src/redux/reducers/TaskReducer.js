@@ -10,7 +10,11 @@ import {
   UPDATE_TASK_FAILURE,
   DELETE_TASK,
   DELETE_TASK_SUCCESS,
-  DELETE_TASK_FAILURE
+  DELETE_TASK_FAILURE,
+  CHANGE_TASK_STATUS,
+  CHANGE_TASK_STATUS_SUCCESS,
+  CHANGE_TASK_STATUS_FAILURE,
+  CLEAN_UP_EDITOR_ERRORS
 } from '../actionTypes';
 
 const initState = {
@@ -18,8 +22,9 @@ const initState = {
   tasks: [],
   selectedTask: null,
   loadingError: '',
-  editorError: '',
-  deletionError: ''
+  createError: '',
+  updateError: '',
+  deleteError: ''
 };
 
 const TaskReducer = (state = initState, action) => {
@@ -48,28 +53,26 @@ const TaskReducer = (state = initState, action) => {
     case CREATE_TASK: {
       return {
         ...state,
-        isLoading: true
+        createError: ''
       };
     }
     case CREATE_TASK_SUCCESS: {
       return {
         ...state,
-        tasks: [...state.tasks, action.payload],
-        isLoading: false,
-        editorError: ''
+        tasks: [action.payload, ...state.tasks],
+        createError: ''
       };
     }
     case CREATE_TASK_FAILURE: {
       return {
         ...state,
-        isLoading: false,
-        editorError: action.payload
+        createError: 'Failed to save new task'
       };
     }
     case UPDATE_TASK: {
       return {
         ...state,
-        isLoading: true
+        updateError: ''
       };
     }
     case UPDATE_TASK_SUCCESS: {
@@ -81,36 +84,64 @@ const TaskReducer = (state = initState, action) => {
           }
           return task;
         }),
-        isLoading: true,
-        editorError: ''
+        updateError: ''
       };
     }
     case UPDATE_TASK_FAILURE: {
       return {
         ...state,
-        isLoading: true,
-        editorError: action.payload
+        updateError: 'Failed to update task'
       };
     }
     case DELETE_TASK: {
       return {
         ...state,
-        isLoading: true
+        deleteError: ''
       };
     }
     case DELETE_TASK_SUCCESS: {
       return {
         ...state,
         tasks: state.tasks.filter(task => task.id !== action.payload),
-        isLoading: false,
-        deletionError: ''
+        deleteError: ''
       };
     }
     case DELETE_TASK_FAILURE: {
       return {
         ...state,
-        isLoading: false,
-        deletionError: action.payload
+        deleteError: 'Failed to delete task'
+      };
+    }
+    case CHANGE_TASK_STATUS: {
+      return {
+        ...state,
+        updateError: ''
+      };
+    }
+    case CHANGE_TASK_STATUS_SUCCESS: {
+      return {
+        ...state,
+        tasks: state.tasks.map(task => {
+          if (task.id === action.payload.id) {
+            return {...action.payload};
+          }
+          return task;
+        }),
+        updateError: ''
+      };
+    }
+    case CHANGE_TASK_STATUS_FAILURE: {
+      return {
+        ...state,
+        updateError: 'Failed to update task'
+      };
+    }
+    case CLEAN_UP_EDITOR_ERRORS: {
+      return {
+        ...state,
+        createError: '',
+        updateError: '',
+        deleteError: ''
       };
     }
     default: {

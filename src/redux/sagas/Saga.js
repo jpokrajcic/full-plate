@@ -10,7 +10,8 @@ import {
   GET_BUILDING_TASKS,
   CREATE_TASK,
   UPDATE_TASK,
-  DELETE_TASK
+  DELETE_TASK,
+  CHANGE_TASK_STATUS
 } from '../actionTypes/TaskActionTypes';
 import {
   GET_BUILDING_APARTMENTS,
@@ -56,6 +57,7 @@ import getTaskCategoriesGen from './taskCategory/getTaskCategoriesGen';
 import createTaskCategoryGen from './taskCategory/createTaskCategoryGen';
 import updateTaskCategoryGen from './taskCategory/updateTaskCategoryGen';
 import deleteTaskCategoryGen from './taskCategory/deleteTaskCategoryGen';
+import changeTaskStatusGen from './task/changeTaskStatusGen';
 
 function* Saga() {
   yield takeLatest(AUTH_REQUEST, authorizeGen);
@@ -72,6 +74,7 @@ function* Saga() {
   yield takeLatest(CREATE_TASK, createTaskGen);
   yield takeLatest(UPDATE_TASK, updateTaskGen);
   yield takeLatest(DELETE_TASK, deleteTaskGen);
+  yield takeLatest(CHANGE_TASK_STATUS, changeTaskStatusGen);
 
   yield takeLatest(GET_BUILDING_APARTMENTS, getBuildingApartmentsGen);
   yield takeLatest(CREATE_APARTMENT, createApartmentGen);

@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/UserActionCreators';
 import authorize from '../../../services/user/authorize';
 
-function* authorizeGen({payload: {data}}) {
+function* authorizeGen({payload}) {
   try {
-    const sessionToken = yield call(authorize, data);
+    const sessionToken = yield call(authorize, payload);
     localStorage.setItem('token', sessionToken);
     yield put(authorizeSuccess(sessionToken));
   } catch (error) {

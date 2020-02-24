@@ -52,7 +52,8 @@ function Buildings({getBuildings, storeBuildings, loadingError, isLoading}) {
     if (id === -1) {
       // create new building
     } else {
-      history.push(`${routes.tasks}`, {buildingId: id});
+      // history.push(`${routes.tasks}`, {buildingId: id});
+      history.push({pathname: routes.tasks, search: `?buildingId=${id}`});
     }
   };
 

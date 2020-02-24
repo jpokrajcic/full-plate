@@ -2,7 +2,9 @@ import React, {useState, useEffect, useParams} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
+import {parse} from 'query-string';
 import {makeStyles} from '@material-ui/styles';
+import {useLocation} from 'react-router-dom';
 import {
   TextField,
   List,
@@ -21,10 +23,13 @@ import Add from '@material-ui/icons/Add';
 import TaskFilters from '../../enum/TaskFilters';
 import TaskEditor from './TaskEditor';
 import TaskIconSelector from './TaskIconSelector';
-import {getBuildingTasks} from '../../redux/actionCreators/TaskActionCreators';
+import {
+  getBuildingTasks,
+  changeTaskStatus,
+  cleanUpEditorErrors
+} from '../../redux/actionCreators/TaskActionCreators';
 import {getTaskCategories} from '../../redux/actionCreators/TaskCategoryActionCreators';
 import {getBuildingApartments} from '../../redux/actionCreators/ApartmentActionCreators';
-import {useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,12 +53,14 @@ function Tasks({
   getBuildingTasks,
   getTaskCategories,
   getBuildingApartments,
+  changeTaskStatus,
+  cleanUpEditorErrors,
   tasks,
   taskCategories,
   apartments,
-  tasksLoaded,
-  taskCategoriesLoaded,
-  apartmentsLoaded,
+  isLoadingTasks,
+  isLoadingTaskCategories,
+  isLoadingApartments,
   loadingError
 }) {
   const [displayTasks, setDisplayTasks] = useState(tasks);
@@ -63,7 +70,8 @@ function Tasks({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const classes = useStyles();
-  const {buildingId} = useLocation().state;
+  const location = useLocation();
+  const {buildingId} = parse(location.search);
 
   useEffect(() => {
     getBuildingTasks({buildingId});
@@ -73,6 +81,7 @@ function Tasks({
 
   useEffect(() => {
     setDisplayTasks(tasks);
+    setDrawerOpen(false);
   }, [tasks]);
 
   const applyFilterAndSearch = (searchValue, filterValue) => {
@@ -114,44 +123,37 @@ function Tasks({
   };
 
   const handleCheckbox = (event, taskId) => {
-    // update task
-    console.log(`${event.target.checked} ${taskId}`);
+    changeTaskStatus({id: taskId, completed: event.target.checked});
   };
 
-  const toggleDrawer = () => {
-    if (!drawerOpen) {
-      //console.log(task);
-    } else {
-      //console.log('banana');
-    }
-    setDrawerOpen(!drawerOpen);
+  // const toggleDrawer = () => {
+  //   setDrawerOpen(!drawerOpen);
+  // };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+    cleanUpEditorErrors();
   };
 
   const handleListSelection = (event, task) => {
     setSelectedTask(task);
-    toggleDrawer();
+    setDrawerOpen(true);
   };
 
   const addNewHandler = () => {
     const newTask = {
       id: -1,
+      buildingId,
+      apartmentId: '',
+      taskCategoryId: '',
       name: '',
       description: '',
-      categoryId: NaN,
       done: false,
       dueDate: null
     };
     setSelectedTask(newTask);
-    toggleDrawer();
+    setDrawerOpen(true);
   };
-
-  const saveHandler = task => {
-    //addTask(task);
-  };
-
-  if (tasksLoaded || taskCategoriesLoaded || apartmentsLoaded) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className={classes.root}>
@@ -206,35 +208,40 @@ function Tasks({
         </ToggleButtonGroup>
       </div>
 
-      <List>
-        {displayTasks.map(task => (
-          <ListItem
-            button
-            divider
-            key={task.id}
-            onClick={event => handleListSelection(event, task)}
-          >
-            <ListItemIcon>
-              <TaskIconSelector categoryId={task.taskCategoryId} />
-            </ListItemIcon>
-            <ListItemText primary={task.name} secondary={task.description} />
-            <ListItemSecondaryAction>
-              <Checkbox
-                checked={task.done}
-                onChange={event => handleCheckbox(event, task.id)}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
+      {isLoadingTasks || isLoadingTaskCategories || isLoadingApartments ? (
+        <div>Loading</div>
+      ) : (
+        <List>
+          {displayTasks.map(task => (
+            <ListItem
+              button
+              divider
+              key={task.id}
+              onClick={event => handleListSelection(event, task)}
+            >
+              <ListItemIcon>
+                <TaskIconSelector categoryId={task.taskCategoryId} />
+              </ListItemIcon>
+              <ListItemText primary={task.name} secondary={task.description} />
+              <ListItemSecondaryAction>
+                <Checkbox
+                  checked={task.done}
+                  onChange={event => handleCheckbox(event, task.id)}
+                  value="completed"
+                  color="primary"
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      )}
 
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
+      <Drawer anchor="right" open={drawerOpen} onClose={closeDrawer}>
         <TaskEditor
           task={selectedTask}
           apartments={apartments}
           taskCategories={taskCategories}
-          onCancel={toggleDrawer}
-          onSave={task => saveHandler(task)}
+          onCancel={closeDrawer}
         />
       </Drawer>
     </div>
@@ -245,13 +252,15 @@ Tasks.propTypes = {
   getBuildingTasks: PropTypes.func.isRequired,
   getTaskCategories: PropTypes.func.isRequired,
   getBuildingApartments: PropTypes.func.isRequired,
+  changeTaskStatus: PropTypes.func.isRequired,
+  cleanUpEditorErrors: PropTypes.func.isRequired,
   tasks: PropTypes.instanceOf(Array).isRequired,
   taskCategories: PropTypes.instanceOf(Array).isRequired,
   apartments: PropTypes.instanceOf(Array).isRequired,
   loadingError: PropTypes.string,
-  tasksLoaded: PropTypes.bool.isRequired,
-  taskCategoriesLoaded: PropTypes.bool.isRequired,
-  apartmentsLoaded: PropTypes.bool.isRequired
+  isLoadingTasks: PropTypes.bool.isRequired,
+  isLoadingTaskCategories: PropTypes.bool.isRequired,
+  isLoadingApartments: PropTypes.bool.isRequired
 };
 Tasks.defaultProps = {
   loadingError: ''
@@ -262,14 +271,20 @@ const mapStateToProps = state => ({
   taskCategories: state.taskCategoryReducer.taskCategories,
   apartments: state.apartmentReducer.apartments,
   loadingError: state.taskReducer.loadingError,
-  tasksLoaded: state.taskReducer.isLoading,
-  taskCategoriesLoaded: state.taskCategoryReducer.isLoading,
-  apartmentsLoaded: state.apartmentReducer.isLoading
+  isLoadingTasks: state.taskReducer.isLoading,
+  isLoadingTaskCategories: state.taskCategoryReducer.isLoading,
+  isLoadingApartments: state.apartmentReducer.isLoading
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    {getBuildingTasks, getTaskCategories, getBuildingApartments},
+    {
+      getBuildingTasks,
+      getTaskCategories,
+      getBuildingApartments,
+      changeTaskStatus,
+      cleanUpEditorErrors
+    },
     dispatch
   );
 

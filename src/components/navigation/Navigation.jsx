@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavLink, useLocation} from 'react-router-dom';
+import {parse} from 'query-string';
 import {makeStyles} from '@material-ui/core';
 import routes from '../../router/routes';
 
@@ -33,6 +34,10 @@ const useStyles = makeStyles(theme => ({
 function Navigation() {
   const classes = useStyles();
   const location = useLocation();
+  const {buildingId} = parse(location.search);
+
+  let searchParams = '';
+  if (buildingId !== '') searchParams = `?buildingId=${buildingId}`;
 
   if (
     location.pathname === routes.login ||
@@ -47,16 +52,28 @@ function Navigation() {
       <NavLink to={routes.buildings} className={classes.link}>
         Buildings
       </NavLink>
-      <NavLink to={routes.tasks} className={classes.link}>
+      <NavLink
+        to={{pathname: routes.tasks, search: searchParams}}
+        className={classes.link}
+      >
         Tasks
       </NavLink>
-      <NavLink to={routes.apartments} className={classes.link}>
+      <NavLink
+        to={{pathname: routes.apartments, search: searchParams}}
+        className={classes.link}
+      >
         Apartments
       </NavLink>
-      <NavLink to={routes.posts} className={classes.link}>
+      <NavLink
+        to={{pathname: routes.messages, search: searchParams}}
+        className={classes.link}
+      >
         Posts
       </NavLink>
-      <NavLink to={routes.dashboard} className={classes.link}>
+      <NavLink
+        to={{pathname: routes.dashboard, search: searchParams}}
+        className={classes.link}
+      >
         Dashboard
       </NavLink>
     </div>

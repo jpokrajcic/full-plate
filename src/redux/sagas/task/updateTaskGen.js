@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/TaskActionCreators';
 import updateTask from '../../../services/task/updateTask';
 
-function* updateTaskGen({payload: {data}}) {
+function* updateTaskGen({payload}) {
   try {
-    const task = yield call(updateTask, {data});
+    const task = yield call(updateTask, payload);
     yield put(updateTaskSuccess(task));
   } catch (error) {
     yield put(updateTaskFailed(error));

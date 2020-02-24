@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/TaskActionCreators';
 import createTask from '../../../services/task/createTask';
 
-function* createTaskGen({payload: {data}}) {
+function* createTaskGen({payload}) {
   try {
-    const task = yield call(createTask, {data});
+    const task = yield call(createTask, payload);
     yield put(createTaskSuccess(task));
   } catch (error) {
     yield put(createTaskFailed(error));
