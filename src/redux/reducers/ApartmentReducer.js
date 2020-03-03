@@ -10,14 +10,16 @@ import {
   UPDATE_APARTMENT_FAILURE,
   DELETE_APARTMENT,
   DELETE_APARTMENT_SUCCESS,
-  DELETE_APARTMENT_FAILURE
+  DELETE_APARTMENT_FAILURE,
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 const initState = {
-  isLoading: true,
-  loaded: false,
+  isLoading: false,
   apartments: [],
-  selectedApartment: null
+  createError: '',
+  updateError: '',
+  deleteError: ''
 };
 
 const ApartmentReducer = (state = initState, action) => {
@@ -25,16 +27,14 @@ const ApartmentReducer = (state = initState, action) => {
     case GET_BUILDING_APARTMENTS: {
       return {
         ...state,
-        isLoading: true,
-        loaded: false
+        isLoading: true
       };
     }
     case GET_BUILDING_APARTMENTS_SUCCESS: {
       return {
         ...state,
         apartments: action.payload,
-        isLoading: false,
-        loaded: true
+        isLoading: false
       };
     }
     case GET_BUILDING_APARTMENTS_FAILURE: {
@@ -46,26 +46,26 @@ const ApartmentReducer = (state = initState, action) => {
     case CREATE_APARTMENT: {
       return {
         ...state,
-        isLoading: true
+        createError: ''
       };
     }
     case CREATE_APARTMENT_SUCCESS: {
       return {
         ...state,
-        apartments: [...state.apartments, action.payload],
-        isLoading: false
+        apartments: [action.payload, ...state.apartments],
+        createError: ''
       };
     }
     case CREATE_APARTMENT_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        createError: 'Failed to save new apartment'
       };
     }
     case UPDATE_APARTMENT: {
       return {
         ...state,
-        isLoading: true
+        updateError: ''
       };
     }
     case UPDATE_APARTMENT_SUCCESS: {
@@ -77,19 +77,18 @@ const ApartmentReducer = (state = initState, action) => {
           }
           return apartment;
         }),
-        isLoading: true
+        updateError: ''
       };
     }
     case UPDATE_APARTMENT_FAILURE: {
       return {
         ...state,
-        isLoading: true
+        updateError: 'Failed to update apartment'
       };
     }
     case DELETE_APARTMENT: {
       return {
-        ...state,
-        isLoading: true
+        ...state
       };
     }
     case DELETE_APARTMENT_SUCCESS: {
@@ -98,13 +97,21 @@ const ApartmentReducer = (state = initState, action) => {
         apartments: state.apartments.filter(
           apartment => apartment.id !== action.payload
         ),
-        isLoading: false
+        deleteError: ''
       };
     }
     case DELETE_APARTMENT_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        deleteError: 'Failed to delete apartment'
+      };
+    }
+    case CLEAN_UP_ERRORS: {
+      return {
+        ...state,
+        createError: '',
+        updateError: '',
+        deleteError: ''
       };
     }
     default: {

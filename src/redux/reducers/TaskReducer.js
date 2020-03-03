@@ -14,11 +14,11 @@ import {
   CHANGE_TASK_STATUS,
   CHANGE_TASK_STATUS_SUCCESS,
   CHANGE_TASK_STATUS_FAILURE,
-  CLEAN_UP_EDITOR_ERRORS
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 const initState = {
-  isLoading: true,
+  isLoading: false,
   tasks: [],
   selectedTask: null,
   loadingError: '',
@@ -136,7 +136,7 @@ const TaskReducer = (state = initState, action) => {
         updateError: 'Failed to update task'
       };
     }
-    case CLEAN_UP_EDITOR_ERRORS: {
+    case CLEAN_UP_ERRORS: {
       return {
         ...state,
         createError: '',

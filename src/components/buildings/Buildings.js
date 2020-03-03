@@ -3,39 +3,23 @@ import {useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import {Grid, makeStyles} from '@material-ui/core';
-import {GET_BUILDINGS} from '../../redux/actionTypes';
-import {BUILDINGS} from '../../services/mock';
+import {Grid, makeStyles, Button, CircularProgress} from '@material-ui/core';
+import Add from '@material-ui/icons/Add';
 import routes from '../../router/routes';
 import {getBuildings} from '../../redux/actionCreators/BuildingActionCreators';
+import BuildingGridItem from './BuildingGridItem';
 
 const useStyles = makeStyles(theme => ({
-  container: {},
-  itemContainer: {
+  addNewButton: {
+    margin: '32px 20px 12px 20px',
+    width: '200px',
+    height: '48px'
+  },
+  loaderContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    border: '1px solid black',
-    margin: '10px',
-    '&:hover, &:focus': {
-      cursor: 'pointer',
-      backgroundColor: 'rgba(150, 150, 150, 0.5)',
-      color: 'rgb(255, 255, 255)'
-    }
-  },
-  item: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  icon: {
-    width: '30%',
-    margin: '20px'
-  },
-  homeGridText: {
-    display: 'block',
-    textAlign: 'center',
-    textJustify: 'bottom'
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: '100px'
   }
 }));
 
@@ -48,54 +32,59 @@ function Buildings({getBuildings, storeBuildings, loadingError, isLoading}) {
   }, []);
 
   const clickHandler = id => {
-    console.log(id);
-    if (id === -1) {
-      // create new building
-    } else {
-      // history.push(`${routes.tasks}`, {buildingId: id});
-      history.push({pathname: routes.tasks, search: `?buildingId=${id}`});
-    }
+    history.push({pathname: routes.tasks, search: `?buildingId=${id}`});
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const addNewHandler = () => {
+    const newBuilding = {
+      id: -1,
+      name: '',
+      street: '',
+      city: '',
+      isSmart: '',
+      picture: ''
+    };
+    console.log('addNewHandler');
+    // setSelectedBuilding(newBuilding);
+    // setDrawerOpen(true);
+  };
 
   return (
-    <Grid container>
-      {storeBuildings.map(
-        ({id, name, street, city, avatar, capacity, occupied}) => (
-          <Grid
-            item
-            md={4}
-            lg={3}
-            xl={4}
-            className={classes.item}
-            key={id}
-            onClick={() => clickHandler(id)}
-          >
-            {id > -1 ? (
-              <div className={classes.itemContainer}>
-                <img
-                  src={avatar}
-                  className={classes.icon}
-                  alt={`This is ${name}`}
-                />
-                <span className={classes.homeGridText}>{name}</span>
-                <span className={classes.homeGridText}>
-                  {`${street},${city}`}
-                </span>
-                <span className={classes.homeGridText}>
-                  {`${occupied}/${capacity}`}
-                </span>
-              </div>
-            ) : (
-              <span className={classes.homeGridText}>+</span>
-            )}
-          </Grid>
-        )
+    <div>
+      <Button
+        disableElevation
+        variant="contained"
+        color="primary"
+        startIcon={<Add />}
+        className={classes.addNewButton}
+        onClick={addNewHandler}
+      >
+        New building
+      </Button>
+
+      {isLoading ? (
+        <div className={classes.loaderContainer}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <Grid container>
+          {storeBuildings.map(
+            ({id, name, street, city, avatar, capacity, occupied}) => (
+              <BuildingGridItem
+                key={id}
+                id={id}
+                name={name}
+                street={street}
+                city={city}
+                avatar={avatar}
+                capacity={capacity}
+                occupied={occupied}
+              />
+            )
+          )}
+        </Grid>
       )}
-    </Grid>
+    </div>
   );
 }
 

@@ -1,14 +1,14 @@
 const ColorPalette = {
-  primaryLight: '#668fff',
-  primary: '#4d7cff',
-  primaryDark: '#3369ff',
+  primaryLight: '#ffbd45',
+  primary: '#fb8c00',
+  primaryDark: '#c25e00',
   primaryIcons: '#b7c9e9',
-  primaryText: '#405466',
+  primaryText: '#000000',
 
-  secondaryLight: '#f2f7ff',
-  secondary: '#d8e6ff',
-  secondaryDark: '#bfd7ff',
-  secondaryText: '#9ba1ac',
+  secondaryLight: '#484848',
+  secondary: '#212121',
+  secondaryDark: '#000000',
+  secondaryText: '#ffffff',
 
   navigationBgBlue: '#f5f6fa',
 

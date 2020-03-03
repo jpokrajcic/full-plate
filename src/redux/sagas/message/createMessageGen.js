@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/MessageActionCreators';
 import createMessage from '../../../services/message/createMessage';
 
-function* createMessageGen({payload: {data}}) {
+function* createMessageGen({payload}) {
   try {
-    const message = yield call(createMessage, {data});
+    const message = yield call(createMessage, payload);
     yield put(createMessageSuccess(message));
   } catch (error) {
     yield put(createMessageFailed(error));

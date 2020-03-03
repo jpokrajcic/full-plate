@@ -5,10 +5,11 @@ import {
 } from '../../actionCreators/ApartmentActionCreators';
 import updateApartment from '../../../services/apartment/updateApartment';
 
-function* updateApartmentGen({payload: {data}}) {
+function* updateApartmentGen({payload}) {
   try {
-    const apartment = yield call(updateApartment, {data});
-    yield put(updateApartmentSuccess(apartment));
+    // const apartment = yield call(updateApartment, payload);
+    // yield put(updateApartmentSuccess(apartment));
+    yield put(updateApartmentFailed('error'));
   } catch (error) {
     yield put(updateApartmentFailed(error));
   }

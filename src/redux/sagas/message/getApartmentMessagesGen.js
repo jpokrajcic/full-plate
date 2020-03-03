@@ -5,9 +5,9 @@ import {
   getApartmentMessagesFailed
 } from '../../actionCreators/MessageActionCreators';
 
-function* getApartmentMessagesGen({payload: {data}}) {
+function* getApartmentMessagesGen({payload}) {
   try {
-    const messages = yield call(getApartmentMessages, data);
+    const messages = yield call(getApartmentMessages, payload);
     yield put(getApartmentMessagesSuccess(messages));
   } catch (error) {
     yield put(getApartmentMessagesFailed(error));

@@ -14,7 +14,7 @@ import {
   DELETE_TASK_FAILURE,
   CHANGE_TASK_STATUS_SUCCESS,
   CHANGE_TASK_STATUS_FAILURE,
-  CLEAN_UP_EDITOR_ERRORS
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 export const getBuildingTasks = data => {
@@ -77,6 +77,6 @@ export const changeTaskStatusFailed = error => {
   return {type: CHANGE_TASK_STATUS_FAILURE, payload: error};
 };
 
-export const cleanUpEditorErrors = () => {
-  return {type: CLEAN_UP_EDITOR_ERRORS, payload: {}};
+export const cleanUpErrors = () => {
+  return {type: CLEAN_UP_ERRORS, payload: {}};
 };

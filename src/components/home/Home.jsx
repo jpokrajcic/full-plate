@@ -15,7 +15,7 @@ function Home() {
   const classes = useStyles();
   const history = useHistory();
 
-  const goToLogin = () => {
+  const goToLoginHandler = () => {
     console.log('bababa');
     history.replace({
       pathname: '/login'
@@ -27,7 +27,7 @@ function Home() {
   return (
     <div className={classes.container}>
       <h1>HOME PAGE</h1>
-      <Button color="primary" onClick={goToLogin} variant="contained">
+      <Button color="primary" onClick={goToLoginHandler} variant="contained">
         Log in
       </Button>
     </div>

@@ -54,6 +54,7 @@ const UserReducer = (state = initState, action) => {
       return {
         ...state,
         sessionToken: '',
+        isAuthenticated: false,
         userProfile: {},
         isLoading: false
       };

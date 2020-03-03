@@ -21,7 +21,11 @@ import {
 } from '../actionTypes/ApartmentActionTypes';
 import {
   GET_BUILDING_MESSAGES,
-  GET_APARTMENT_MESSAGES
+  GET_APARTMENT_MESSAGES,
+  UPDATE_MESSAGE,
+  CREATE_MESSAGE,
+  DELETE_MESSAGE,
+  MARK_MESSAGE_AS_READ
 } from '../actionTypes/MessageActionTypes';
 import {
   GET_USER_PROFILE_REQUEST,
@@ -35,11 +39,14 @@ import {
   DELETE_TASK_CATEGORY
 } from '../actionTypes/TaskCategoryActionTypes';
 import authorizeGen from './user/authorizeGen';
+import getUserProfileGen from './user/getUserProfileGen';
 import getBuildingsGen from './building/getBuildingsGen';
 import getBuildingTasksGen from './task/getBuildingTasksGen';
 import getBuildingApartmentsGen from './apartment/getBuildingApartmentsGen';
 import getBuildingMessagesGen from './message/getBuildingMessagesGen';
-import getUserProfileGen from './user/getUserProfileGen';
+import getApartmentMessagesGen from './message/getApartmentMessagesGen';
+import getBuildingTaskCategoriesGen from './taskCategory/getBuildingTaskCategoriesGen';
+import getTaskCategoriesGen from './taskCategory/getTaskCategoriesGen';
 import changePasswordGen from './user/changePasswordGen';
 import logoutGen from './user/logoutGen';
 import createBuildingGen from './building/createBuildingGen';
@@ -51,13 +58,14 @@ import deleteTaskGen from './task/deleteTaskGen';
 import createApartmentGen from './apartment/createApartmentGen';
 import updateApartmentGen from './apartment/updateApartmentGen';
 import deleteApartmentGen from './apartment/deleteApartmentGen';
-import getApartmentMessagesGen from './message/getApartmentMessagesGen';
-import getBuildingTaskCategoriesGen from './taskCategory/getBuildingTaskCategoriesGen';
-import getTaskCategoriesGen from './taskCategory/getTaskCategoriesGen';
+import createMessageGen from './message/createMessageGen';
+import updateMessageGen from './message/updateMessageGen';
+import deleteMessageGen from './message/deleteMessageGen';
 import createTaskCategoryGen from './taskCategory/createTaskCategoryGen';
 import updateTaskCategoryGen from './taskCategory/updateTaskCategoryGen';
 import deleteTaskCategoryGen from './taskCategory/deleteTaskCategoryGen';
 import changeTaskStatusGen from './task/changeTaskStatusGen';
+import markMessageAsReadGen from './message/markMessageAsReadGen';
 
 function* Saga() {
   yield takeLatest(AUTH_REQUEST, authorizeGen);
@@ -83,9 +91,10 @@ function* Saga() {
 
   yield takeLatest(GET_BUILDING_MESSAGES, getBuildingMessagesGen);
   yield takeLatest(GET_APARTMENT_MESSAGES, getApartmentMessagesGen);
-  yield takeLatest(CREATE_APARTMENT, createApartmentGen);
-  yield takeLatest(UPDATE_APARTMENT, updateApartmentGen);
-  yield takeLatest(DELETE_APARTMENT, deleteApartmentGen);
+  yield takeLatest(CREATE_MESSAGE, createMessageGen);
+  yield takeLatest(UPDATE_MESSAGE, updateMessageGen);
+  yield takeLatest(DELETE_MESSAGE, deleteMessageGen);
+  yield takeLatest(MARK_MESSAGE_AS_READ, markMessageAsReadGen);
 
   yield takeLatest(GET_BUILDING_TASK_CATEGORIES, getBuildingTaskCategoriesGen);
   yield takeLatest(GET_TASK_CATEGORIES, getTaskCategoriesGen);

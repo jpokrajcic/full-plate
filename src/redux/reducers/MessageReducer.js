@@ -10,13 +10,20 @@ import {
   UPDATE_MESSAGE_FAILURE,
   DELETE_MESSAGE,
   DELETE_MESSAGE_SUCCESS,
-  DELETE_MESSAGE_FAILURE
+  DELETE_MESSAGE_FAILURE,
+  MARK_MESSAGE_AS_READ,
+  MARK_MESSAGE_AS_READ_SUCCESS,
+  MARK_MESSAGE_AS_READ_FAILURE,
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 const initState = {
-  isLoading: true,
+  isLoading: false,
   messages: [],
-  selectedMessage: null
+  createError: '',
+  deleteError: '',
+  updateError: '',
+  markAsReadError: ''
 };
 
 const MessageReducer = (state = initState, action) => {
@@ -43,26 +50,26 @@ const MessageReducer = (state = initState, action) => {
     case CREATE_MESSAGE: {
       return {
         ...state,
-        isLoading: true
+        createError: ''
       };
     }
     case CREATE_MESSAGE_SUCCESS: {
       return {
         ...state,
-        messages: [...state.messages, action.payload],
-        isLoading: false
+        messages: [action.payload, ...state.messages],
+        createError: ''
       };
     }
     case CREATE_MESSAGE_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        createError: 'Failed to send new message'
       };
     }
     case UPDATE_MESSAGE: {
       return {
         ...state,
-        isLoading: true
+        updateError: ''
       };
     }
     case UPDATE_MESSAGE_SUCCESS: {
@@ -74,19 +81,19 @@ const MessageReducer = (state = initState, action) => {
           }
           return message;
         }),
-        isLoading: true
+        updateError: ''
       };
     }
     case UPDATE_MESSAGE_FAILURE: {
       return {
         ...state,
-        isLoading: true
+        updateError: 'Failed to update message'
       };
     }
     case DELETE_MESSAGE: {
       return {
         ...state,
-        isLoading: true
+        deleteError: ''
       };
     }
     case DELETE_MESSAGE_SUCCESS: {
@@ -95,13 +102,46 @@ const MessageReducer = (state = initState, action) => {
         messages: state.messages.filter(
           message => message.id !== action.payload
         ),
-        isLoading: false
+        deleteError: ''
       };
     }
     case DELETE_MESSAGE_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        deleteError: 'Failed to delete apartment'
+      };
+    }
+    case MARK_MESSAGE_AS_READ: {
+      return {
+        ...state,
+        markAsReadError: ''
+      };
+    }
+    case MARK_MESSAGE_AS_READ_SUCCESS: {
+      return {
+        ...state,
+        messages: state.messages.map(message => {
+          if (message.id === action.payload) {
+            return {...message, read: true};
+          }
+          return message;
+        }),
+        markAsReadError: ''
+      };
+    }
+    case MARK_MESSAGE_AS_READ_FAILURE: {
+      return {
+        ...state,
+        markAsReadError: 'Failed to mark message as read'
+      };
+    }
+    case CLEAN_UP_ERRORS: {
+      return {
+        ...state,
+        createError: '',
+        deleteError: '',
+        updateError: '',
+        markAsReadError: ''
       };
     }
     default: {

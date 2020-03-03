@@ -10,7 +10,8 @@ import {
   UPDATE_APARTMENT_SUCCESS,
   UPDATE_APARTMENT_FAILURE,
   DELETE_APARTMENT_SUCCESS,
-  DELETE_APARTMENT_FAILURE
+  DELETE_APARTMENT_FAILURE,
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 export const getBuildingApartments = data => {
@@ -59,4 +60,8 @@ export const deleteApartmentSuccess = data => {
 
 export const deleteApartmentFailed = error => {
   return {type: DELETE_APARTMENT_FAILURE, payload: error};
+};
+
+export const cleanUpApartmentErrors = () => {
+  return {type: CLEAN_UP_ERRORS, payload: {}};
 };

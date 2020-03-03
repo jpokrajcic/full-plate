@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: '100%',
@@ -54,12 +54,12 @@ function Login({authorize, isAuthenticated, error}) {
     }
   }, [isAuthenticated]);
 
-  const handleSubmit = event => {
+  const submitHandler = event => {
     event.preventDefault();
     authorize({username, password});
   };
 
-  const handleInputChange = event => {
+  const inputChangeHandler = event => {
     if (event.target.name === 'username') {
       setUsername(event.target.value);
     } else if (event.target.name === 'password') {
@@ -85,7 +85,7 @@ function Login({authorize, isAuthenticated, error}) {
             name="username"
             autoFocus
             autoComplete="off"
-            onChange={handleInputChange}
+            onChange={inputChangeHandler}
           />
           <TextField
             id="password"
@@ -96,7 +96,7 @@ function Login({authorize, isAuthenticated, error}) {
             label="Password"
             name="password"
             type="password"
-            onChange={handleInputChange}
+            onChange={inputChangeHandler}
           />
           <Button
             className={classes.submit}
@@ -104,7 +104,7 @@ function Login({authorize, isAuthenticated, error}) {
             fullWidth
             color="primary"
             variant="contained"
-            onClick={handleSubmit}
+            onClick={submitHandler}
           >
             Log in
           </Button>

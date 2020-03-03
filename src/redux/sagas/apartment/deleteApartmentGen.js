@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/ApartmentActionCreators';
 import deleteApartment from '../../../services/apartment/deleteApartment';
 
-function* deleteApartmentGen({payload: {data}}) {
+function* deleteApartmentGen({payload}) {
   try {
-    const deletedApartmentId = yield call(deleteApartment, {data});
+    const deletedApartmentId = yield call(deleteApartment, payload);
     yield put(deleteApartmentSuccess(deletedApartmentId));
   } catch (error) {
     yield put(deleteApartmentFailed(error));

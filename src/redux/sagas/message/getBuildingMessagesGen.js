@@ -5,9 +5,9 @@ import {
   getBuildingMessagesFailed
 } from '../../actionCreators/MessageActionCreators';
 
-function* getBuildingMessagesGen({payload: {data}}) {
+function* getBuildingMessagesGen({payload}) {
   try {
-    const messages = yield call(getBuildingMessages, data);
+    const messages = yield call(getBuildingMessages, payload);
     yield put(getBuildingMessagesSuccess(messages));
   } catch (error) {
     yield put(getBuildingMessagesFailed(error));

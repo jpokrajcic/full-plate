@@ -5,9 +5,9 @@ import {
 } from '../../actionCreators/MessageActionCreators';
 import deleteMessage from '../../../services/message/deleteMessage';
 
-function* deleteMessageGen({payload: {data}}) {
+function* deleteMessageGen({payload}) {
   try {
-    const deletedMessageId = yield call(deleteMessage, {data});
+    const deletedMessageId = yield call(deleteMessage, payload);
     yield put(deleteMessageSuccess(deletedMessageId));
   } catch (error) {
     yield put(deleteMessageFailed(error));

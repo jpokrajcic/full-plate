@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
-import {useSnackbar} from 'notistack';
 import {
   TextField,
   FormControl,
@@ -28,7 +27,7 @@ import {
   deleteTask
 } from '../../redux/actionCreators/TaskActionCreators';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -62,6 +61,10 @@ const useStyles = makeStyles(() => ({
     color: 'rgb(255,0,0)',
     width: '100%',
     textAlign: 'center'
+  },
+  deleteButton: {
+    // backgroundColor: theme.palette.error.main,
+    color: 'rgb(0,  0, 0)'
   }
 }));
 
@@ -72,14 +75,9 @@ function TaskEditor({
   task,
   apartments,
   taskCategories,
-  onCancel,
-  createError,
-  updateError,
-  deleteError
+  onCancel
 }) {
   const classes = useStyles();
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-
   const categoryInputLabel = useRef(null);
   const apartmentInputLabel = useRef(null);
   const [categoryLabelWidth, setCategoryLabelWidth] = useState(0);
@@ -91,24 +89,16 @@ function TaskEditor({
   const [apartmentId, setApartmentId] = useState(task ? task.apartmentId : '');
   const [description, setDescription] = useState(task ? task.description : '');
   const [dueDate, setDueDate] = useState(task ? task.dueDate : null);
-  const [completed, setCompleted] = useState(task ? task.done : false);
-  //
+  const [completed, setCompleted] = useState(task ? task.completed : false);
+
+  // Handle Select componets InputLabel width
+  // (without this we get outline overlaping InputLabel)
   useEffect(() => {
     if (categoryInputLabel !== null && categoryInputLabel.current !== null)
       setCategoryLabelWidth(categoryInputLabel.current.offsetWidth);
     if (apartmentInputLabel !== null && apartmentInputLabel.current !== null)
       setApartmentLabelWidth(apartmentInputLabel.current.offsetWidth);
   }, []);
-
-  // Show snack bar notifications (if any)
-  useEffect(() => {
-    if (createError !== '')
-      enqueueSnackbar('Failed to create task!', {variant: 'error'});
-    if (updateError !== '')
-      enqueueSnackbar('Failed to update task!', {variant: 'error'});
-    if (deleteError !== '')
-      enqueueSnackbar('Failed to delete task!', {variant: 'error'});
-  }, [createError, updateError, deleteError]);
 
   const nameChangeHandler = event => {
     setName(event.target.value);
@@ -135,8 +125,6 @@ function TaskEditor({
   };
 
   const saveHandler = () => {
-    closeSnackbar();
-
     const taskData = {
       id: task.id,
       buildingId: task.buildingId,
@@ -144,7 +132,7 @@ function TaskEditor({
       taskCategoryId,
       name,
       description,
-      done: completed,
+      completed,
       dueDate
     };
 
@@ -156,8 +144,6 @@ function TaskEditor({
   };
 
   const cancelHandler = () => {
-    closeSnackbar();
-
     onCancel();
   };
 
@@ -215,7 +201,7 @@ function TaskEditor({
           >
             {apartments.map(apartment => (
               <MenuItem key={apartment.id} value={apartment.id}>
-                {`${apartment.apartmentNumber} ${apartment.lastName}`}
+                {`${apartment.number} ${apartment.lastName}`}
               </MenuItem>
             ))}
           </Select>
@@ -281,16 +267,16 @@ function TaskEditor({
             Cancel
           </Button>
 
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={deleteHandler}
-            className={classes.button}
-            startIcon={<DeleteIcon />}
-            disabled={task.id === -1}
-          >
-            Delete
-          </Button>
+          {task.id === -1 ? null : (
+            <Button
+              variant="contained"
+              onClick={deleteHandler}
+              className={classNames(classes.button, classes.deleteButton)}
+              startIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </form>
     </div>
@@ -304,30 +290,21 @@ TaskEditor.propTypes = {
   onCancel: PropTypes.func.isRequired,
   task: PropTypes.shape({
     id: PropTypes.number,
-    buildingId: PropTypes.number,
-    apartmentId: PropTypes.number,
-    taskCategoryId: PropTypes.number,
+    buildingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    apartmentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    taskCategoryId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     name: PropTypes.string,
     description: PropTypes.string,
-    done: PropTypes.bool,
+    completed: PropTypes.bool,
     dueDate: PropTypes.string
-  }),
+  }).isRequired,
   apartments: PropTypes.instanceOf(Array).isRequired,
-  taskCategories: PropTypes.instanceOf(Array).isRequired,
-  createError: PropTypes.string,
-  updateError: PropTypes.string,
-  deleteError: PropTypes.string
-};
-TaskEditor.defaultProps = {
-  createError: '',
-  updateError: '',
-  deleteError: ''
+  taskCategories: PropTypes.instanceOf(Array).isRequired
 };
 
 const mapStateToProps = state => ({
-  createError: state.taskReducer.createError,
-  updateError: state.taskReducer.updateError,
-  deleteError: state.taskReducer.deleteError
+  taskCategories: state.taskCategoryReducer.taskCategories,
+  apartments: state.apartmentReducer.apartments
 });
 
 const mapDispatchToProps = dispatch =>

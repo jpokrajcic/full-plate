@@ -13,7 +13,11 @@ import {
   UPDATE_MESSAGE_SUCCESS,
   UPDATE_MESSAGE_FAILURE,
   DELETE_MESSAGE_SUCCESS,
-  DELETE_MESSAGE_FAILURE
+  DELETE_MESSAGE_FAILURE,
+  MARK_MESSAGE_AS_READ,
+  MARK_MESSAGE_AS_READ_SUCCESS,
+  MARK_MESSAGE_AS_READ_FAILURE,
+  CLEAN_UP_ERRORS
 } from '../actionTypes';
 
 export const getBuildingMessages = data => {
@@ -74,4 +78,21 @@ export const deleteMessageSuccess = data => {
 
 export const deleteMessageFailed = error => {
   return {type: DELETE_MESSAGE_FAILURE, payload: error};
+};
+
+export const markMessageAsRead = data => {
+  return {type: MARK_MESSAGE_AS_READ, payload: data};
+};
+
+export const markMessageAsReadSuccess = data => {
+  return {type: MARK_MESSAGE_AS_READ_SUCCESS, payload: data};
+};
+
+export const markMessageAsReadFailed = error => {
+  return {type: MARK_MESSAGE_AS_READ_FAILURE, payload: error};
+};
+
+export const cleanUpMessageErrors = () => {
+  console.log('juhuuuuuu');
+  return {type: CLEAN_UP_ERRORS, payload: {}};
 };

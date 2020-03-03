@@ -1,6 +1,8 @@
 const endpoints = {
   urlBase: 'http://192.168.0.27:8080/rest/v1/user/',
   urlAnon: 'http://192.168.0.27:8080/rest/v1/anon/',
+  // urlBase: 'http://192.168.1.7:8080/rest/v1/user/',
+  // urlAnon: 'http://192.168.1.7:8080/rest/v1/anon/',
   login: 'login',
   logout: 'logout',
   keepAlive: 'keepAlive',
@@ -24,6 +26,7 @@ const endpoints = {
   getApartmentMessages: 'getApartmentMessages',
   updateMessage: 'updateMessage',
   deleteMessage: 'deleteMessage',
+  markMessageAsRead: 'markMessageAsRead',
   createMonitoring: 'createMonitoring',
   getBuildingMonitorings: 'getBuildingMonitorings',
   getBuildingMonitoringsByCategory: 'getBuildingMonitoringsByCategory',
@@ -39,12 +42,7 @@ const endpoints = {
   getBuildingMonitoringCategories: 'getBuildingMonitoringCategories',
   updateMonitoringCategory: 'updateMonitoringCategory',
   deleteMonitoringCategory: 'deleteMonitoringCategory',
-  changePassword: 'update_password', // !!!!not implemented on server side jet!!!!!
-  api:
-    process.env.NODE_ENV !== 'production'
-      ? 'http://localhost:8080/https://staging.seer.com'
-      : 'https://staging.seer.com',
-  appUrl: 'https://webstaging.seer.com'
+  changePassword: 'update_password' // !!!!not implemented on server side jet!!!!!
 };
 
 export default endpoints;

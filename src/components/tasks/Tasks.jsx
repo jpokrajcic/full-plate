@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useParams} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {parse} from 'query-string';
 import {makeStyles} from '@material-ui/styles';
 import {useLocation} from 'react-router-dom';
+import {useSnackbar} from 'notistack';
 import {
   TextField,
   List,
@@ -15,7 +16,8 @@ import {
   Checkbox,
   InputAdornment,
   Button,
-  Drawer
+  Drawer,
+  CircularProgress
 } from '@material-ui/core';
 import {ToggleButtonGroup, ToggleButton} from '@material-ui/lab';
 import Search from '@material-ui/icons/Search';
@@ -26,7 +28,7 @@ import TaskIconSelector from './TaskIconSelector';
 import {
   getBuildingTasks,
   changeTaskStatus,
-  cleanUpEditorErrors
+  cleanUpErrors
 } from '../../redux/actionCreators/TaskActionCreators';
 import {getTaskCategories} from '../../redux/actionCreators/TaskCategoryActionCreators';
 import {getBuildingApartments} from '../../redux/actionCreators/ApartmentActionCreators';
@@ -46,6 +48,12 @@ const useStyles = makeStyles(() => ({
     border: '2px solid red',
     boxSizing: 'content-box',
     padding: '8px'
+  },
+  loaderContainer: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: '100px'
   }
 }));
 
@@ -54,14 +62,15 @@ function Tasks({
   getTaskCategories,
   getBuildingApartments,
   changeTaskStatus,
-  cleanUpEditorErrors,
+  cleanUpErrors,
   tasks,
-  taskCategories,
-  apartments,
   isLoadingTasks,
   isLoadingTaskCategories,
   isLoadingApartments,
-  loadingError
+  loadingError,
+  createError,
+  updateError,
+  deleteError
 }) {
   const [displayTasks, setDisplayTasks] = useState(tasks);
   const [search, setSearch] = useState('');
@@ -70,6 +79,7 @@ function Tasks({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const classes = useStyles();
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
   const location = useLocation();
   const {buildingId} = parse(location.search);
 
@@ -82,9 +92,26 @@ function Tasks({
   useEffect(() => {
     setDisplayTasks(tasks);
     setDrawerOpen(false);
+    applyFilterAndSearch(search, filter);
   }, [tasks]);
 
-  const applyFilterAndSearch = (searchValue, filterValue) => {
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (createError !== '') showSnackBar(createError);
+
+    if (updateError !== '') showSnackBar(updateError);
+
+    if (deleteError !== '') showSnackBar(deleteError);
+  }, [createError, updateError, deleteError]);
+
+  function showSnackBar(message) {
+    enqueueSnackbar(message, {
+      variant: 'error',
+      onClose: () => cleanUpErrors()
+    });
+  }
+
+  function applyFilterAndSearch(searchValue, filterValue) {
     let newList = [];
 
     if (searchValue !== '') {
@@ -95,47 +122,42 @@ function Tasks({
         return (
           lowerCaseTask.includes(lowerCaseSearch) &&
           (filterValue === TaskFilters.ALL ||
-            (filterValue === TaskFilters.COMPLETE && task.done) ||
-            (filterValue === TaskFilters.UNCOMPLETE && !task.done))
+            (filterValue === TaskFilters.COMPLETE && task.completed) ||
+            (filterValue === TaskFilters.UNCOMPLETE && !task.completed))
         );
       });
     } else {
       newList = tasks.filter(task => {
         return (
           filterValue === TaskFilters.ALL ||
-          (filterValue === TaskFilters.COMPLETE && task.done) ||
-          (filterValue === TaskFilters.UNCOMPLETE && !task.done)
+          (filterValue === TaskFilters.COMPLETE && task.completed) ||
+          (filterValue === TaskFilters.UNCOMPLETE && !task.completed)
         );
       });
     }
 
     setDisplayTasks(newList);
-  };
+  }
 
-  const handleSearchChanges = event => {
+  const searchChangesHandler = event => {
     setSearch(event.target.value);
     applyFilterAndSearch(event.target.value, filter);
   };
 
-  const handleFilterSelection = (event, newFilter) => {
+  const filterSelectionHandler = (event, newFilter) => {
     setFilter(newFilter);
     applyFilterAndSearch(search, newFilter);
   };
 
-  const handleCheckbox = (event, taskId) => {
+  const checkboxHandler = (event, taskId) => {
     changeTaskStatus({id: taskId, completed: event.target.checked});
   };
 
-  // const toggleDrawer = () => {
-  //   setDrawerOpen(!drawerOpen);
-  // };
-
   const closeDrawer = () => {
     setDrawerOpen(false);
-    cleanUpEditorErrors();
   };
 
-  const handleListSelection = (event, task) => {
+  const listSelectionHandler = (event, task) => {
     setSelectedTask(task);
     setDrawerOpen(true);
   };
@@ -148,7 +170,7 @@ function Tasks({
       taskCategoryId: '',
       name: '',
       description: '',
-      done: false,
+      completed: false,
       dueDate: null
     };
     setSelectedTask(newTask);
@@ -162,7 +184,7 @@ function Tasks({
         type="search"
         variant="outlined"
         value={search}
-        onChange={e => handleSearchChanges(e)}
+        onChange={e => searchChangesHandler(e)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -180,12 +202,12 @@ function Tasks({
           startIcon={<Add />}
           onClick={addNewHandler}
         >
-          Add new
+          New task
         </Button>
 
         <ToggleButtonGroup
           exclusive
-          onChange={handleFilterSelection}
+          onChange={filterSelectionHandler}
           value={filter}
         >
           <ToggleButton size="small" value={TaskFilters.ALL} aria-label="all">
@@ -209,7 +231,9 @@ function Tasks({
       </div>
 
       {isLoadingTasks || isLoadingTaskCategories || isLoadingApartments ? (
-        <div>Loading</div>
+        <div className={classes.loaderContainer}>
+          <CircularProgress />
+        </div>
       ) : (
         <List>
           {displayTasks.map(task => (
@@ -217,16 +241,20 @@ function Tasks({
               button
               divider
               key={task.id}
-              onClick={event => handleListSelection(event, task)}
+              onClick={event => listSelectionHandler(event, task)}
             >
               <ListItemIcon>
-                <TaskIconSelector categoryId={task.taskCategoryId} />
+                <TaskIconSelector
+                  categoryId={
+                    task.taskCategoryId !== null ? task.taskCategoryId : -1
+                  }
+                />
               </ListItemIcon>
               <ListItemText primary={task.name} secondary={task.description} />
               <ListItemSecondaryAction>
                 <Checkbox
-                  checked={task.done}
-                  onChange={event => handleCheckbox(event, task.id)}
+                  checked={task.completed}
+                  onChange={event => checkboxHandler(event, task.id)}
                   value="completed"
                   color="primary"
                 />
@@ -237,12 +265,7 @@ function Tasks({
       )}
 
       <Drawer anchor="right" open={drawerOpen} onClose={closeDrawer}>
-        <TaskEditor
-          task={selectedTask}
-          apartments={apartments}
-          taskCategories={taskCategories}
-          onCancel={closeDrawer}
-        />
+        <TaskEditor task={selectedTask} onCancel={closeDrawer} />
       </Drawer>
     </div>
   );
@@ -253,24 +276,29 @@ Tasks.propTypes = {
   getTaskCategories: PropTypes.func.isRequired,
   getBuildingApartments: PropTypes.func.isRequired,
   changeTaskStatus: PropTypes.func.isRequired,
-  cleanUpEditorErrors: PropTypes.func.isRequired,
+  cleanUpErrors: PropTypes.func.isRequired,
   tasks: PropTypes.instanceOf(Array).isRequired,
-  taskCategories: PropTypes.instanceOf(Array).isRequired,
-  apartments: PropTypes.instanceOf(Array).isRequired,
   loadingError: PropTypes.string,
+  createError: PropTypes.string,
+  updateError: PropTypes.string,
+  deleteError: PropTypes.string,
   isLoadingTasks: PropTypes.bool.isRequired,
   isLoadingTaskCategories: PropTypes.bool.isRequired,
   isLoadingApartments: PropTypes.bool.isRequired
 };
 Tasks.defaultProps = {
-  loadingError: ''
+  loadingError: '',
+  createError: '',
+  updateError: '',
+  deleteError: ''
 };
 
 const mapStateToProps = state => ({
   tasks: state.taskReducer.tasks,
-  taskCategories: state.taskCategoryReducer.taskCategories,
-  apartments: state.apartmentReducer.apartments,
   loadingError: state.taskReducer.loadingError,
+  createError: state.taskReducer.createError,
+  updateError: state.taskReducer.updateError,
+  deleteError: state.taskReducer.deleteError,
   isLoadingTasks: state.taskReducer.isLoading,
   isLoadingTaskCategories: state.taskCategoryReducer.isLoading,
   isLoadingApartments: state.apartmentReducer.isLoading
@@ -283,7 +311,7 @@ const mapDispatchToProps = dispatch =>
       getTaskCategories,
       getBuildingApartments,
       changeTaskStatus,
-      cleanUpEditorErrors
+      cleanUpErrors
     },
     dispatch
   );

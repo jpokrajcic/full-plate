@@ -15,7 +15,7 @@ const AppTheme = createMuiTheme({
       dark: ColorPalette.secondaryDark,
       contrastText: '#fff'
     },
-    error: {main: '#ff4d52'},
+    error: {main: ColorPalette.error},
     // Used by `getContrastText()` to maximize the contrast between the background and
     // the text.
     contrastThreshold: 3,
