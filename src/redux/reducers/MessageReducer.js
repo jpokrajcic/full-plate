@@ -14,12 +14,13 @@ import {
   MARK_MESSAGE_AS_READ,
   MARK_MESSAGE_AS_READ_SUCCESS,
   MARK_MESSAGE_AS_READ_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_MESSAGE_ERRORS
 } from '../actionTypes';
 
 const initState = {
   isLoading: false,
   messages: [],
+  loadingError: '',
   createError: '',
   deleteError: '',
   updateError: '',
@@ -31,20 +32,23 @@ const MessageReducer = (state = initState, action) => {
     case GET_BUILDING_MESSAGES: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loadingError: ''
       };
     }
     case GET_BUILDING_MESSAGES_SUCCESS: {
       return {
         ...state,
         messages: action.payload,
-        isLoading: false
+        isLoading: false,
+        loadingError: ''
       };
     }
     case GET_BUILDING_MESSAGES_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        loadingError: 'Failed loading messages!'
       };
     }
     case CREATE_MESSAGE: {
@@ -135,13 +139,14 @@ const MessageReducer = (state = initState, action) => {
         markAsReadError: 'Failed to mark message as read'
       };
     }
-    case CLEAN_UP_ERRORS: {
+    case CLEAN_UP_MESSAGE_ERRORS: {
       return {
         ...state,
         createError: '',
         deleteError: '',
         updateError: '',
-        markAsReadError: ''
+        markAsReadError: '',
+        loadingError: ''
       };
     }
     default: {

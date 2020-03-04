@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useRef, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -27,7 +28,7 @@ import {
   deleteTask
 } from '../../redux/actionCreators/TaskActionCreators';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -100,31 +101,31 @@ function TaskEditor({
       setApartmentLabelWidth(apartmentInputLabel.current.offsetWidth);
   }, []);
 
-  const nameChangeHandler = event => {
+  function nameChangeHandler(event) {
     setName(event.target.value);
-  };
+  }
 
-  const categoryChangeHandler = event => {
+  function categoryChangeHandler(event) {
     setTaskCategoryId(event.target.value);
-  };
+  }
 
-  const apartmentChangeHandler = event => {
+  function apartmentChangeHandler(event) {
     setApartmentId(event.target.value);
-  };
+  }
 
-  const descriptionChangeHandler = event => {
+  function descriptionChangeHandler(event) {
     setDescription(event.target.value);
-  };
+  }
 
-  const dateChangeHandler = date => {
+  function dateChangeHandler(date) {
     setDueDate(date);
-  };
+  }
 
-  const completionChangeHandler = event => {
+  function completionChangeHandler(event) {
     setCompleted(event.target.checked);
-  };
+  }
 
-  const saveHandler = () => {
+  function saveHandler() {
     const taskData = {
       id: task.id,
       buildingId: task.buildingId,
@@ -141,15 +142,15 @@ function TaskEditor({
     } else {
       createTask({task: taskData});
     }
-  };
+  }
 
-  const cancelHandler = () => {
+  function cancelHandler() {
     onCancel();
-  };
+  }
 
-  const deleteHandler = () => {
+  function deleteHandler() {
     deleteTask({id: task.id});
-  };
+  }
 
   // Display blank editor if task is missing
   if (task === null || task === 'undefined') return null;

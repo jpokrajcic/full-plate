@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {ThemeProvider, CssBaseline} from '@material-ui/core';
 import {SnackbarProvider} from 'notistack';
@@ -21,7 +21,7 @@ function App() {
     <ThemeProvider theme={AppTheme}>
       <CssBaseline />
       <SnackbarProvider
-        maxSnack={2}
+        maxSnack={3}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center'

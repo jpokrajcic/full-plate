@@ -11,7 +11,7 @@ import {
   DELETE_APARTMENT,
   DELETE_APARTMENT_SUCCESS,
   DELETE_APARTMENT_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_APARTMENT_ERRORS
 } from '../actionTypes';
 
 const initState = {
@@ -19,7 +19,8 @@ const initState = {
   apartments: [],
   createError: '',
   updateError: '',
-  deleteError: ''
+  deleteError: '',
+  loadingError: ''
 };
 
 const ApartmentReducer = (state = initState, action) => {
@@ -27,20 +28,23 @@ const ApartmentReducer = (state = initState, action) => {
     case GET_BUILDING_APARTMENTS: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loadingError: ''
       };
     }
     case GET_BUILDING_APARTMENTS_SUCCESS: {
       return {
         ...state,
         apartments: action.payload,
-        isLoading: false
+        isLoading: false,
+        loadingError: ''
       };
     }
     case GET_BUILDING_APARTMENTS_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        loadingError: 'Failed loading apartments'
       };
     }
     case CREATE_APARTMENT: {
@@ -106,12 +110,13 @@ const ApartmentReducer = (state = initState, action) => {
         deleteError: 'Failed to delete apartment'
       };
     }
-    case CLEAN_UP_ERRORS: {
+    case CLEAN_UP_APARTMENT_ERRORS: {
       return {
         ...state,
         createError: '',
         updateError: '',
-        deleteError: ''
+        deleteError: '',
+        loadingError: ''
       };
     }
     default: {

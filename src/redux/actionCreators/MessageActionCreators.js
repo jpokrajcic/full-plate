@@ -17,82 +17,91 @@ import {
   MARK_MESSAGE_AS_READ,
   MARK_MESSAGE_AS_READ_SUCCESS,
   MARK_MESSAGE_AS_READ_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_MESSAGE_ERRORS
 } from '../actionTypes';
 
-export const getBuildingMessages = data => {
-  return {type: GET_BUILDING_MESSAGES, payload: data};
-};
+export const getBuildingMessages = data => ({
+  type: GET_BUILDING_MESSAGES,
+  payload: data
+});
 
-export const getBuildingMessagesSuccess = data => {
-  return {type: GET_BUILDING_MESSAGES_SUCCESS, payload: data};
-};
+export const getBuildingMessagesSuccess = data => ({
+  type: GET_BUILDING_MESSAGES_SUCCESS,
+  payload: data
+});
 
-export const getBuildingMessagesFailed = error => {
-  return {type: GET_BUILDING_MESSAGES_FAILURE, payload: error};
-};
+export const getBuildingMessagesFailed = error => ({
+  type: GET_BUILDING_MESSAGES_FAILURE,
+  payload: error
+});
 
-export const getApartmentMessages = data => {
-  return {type: GET_APARTMENT_MESSAGES, payload: data};
-};
+export const getApartmentMessages = data => ({
+  type: GET_APARTMENT_MESSAGES,
+  payload: data
+});
 
-export const getApartmentMessagesSuccess = data => {
-  return {type: GET_APARTMENT_MESSAGES_SUCCESS, payload: data};
-};
+export const getApartmentMessagesSuccess = data => ({
+  type: GET_APARTMENT_MESSAGES_SUCCESS,
+  payload: data
+});
 
-export const getApartmentMessagesFailed = error => {
-  return {type: GET_APARTMENT_MESSAGES_FAILURE, payload: error};
-};
+export const getApartmentMessagesFailed = error => ({
+  type: GET_APARTMENT_MESSAGES_FAILURE,
+  payload: error
+});
 
-export const createMessage = data => {
-  return {type: CREATE_MESSAGE, payload: data};
-};
+export const createMessage = data => ({type: CREATE_MESSAGE, payload: data});
 
-export const createMessageSuccess = data => {
-  return {type: CREATE_MESSAGE_SUCCESS, payload: data};
-};
+export const createMessageSuccess = data => ({
+  type: CREATE_MESSAGE_SUCCESS,
+  payload: data
+});
 
-export const createMessageFailed = error => {
-  return {type: CREATE_MESSAGE_FAILURE, payload: error};
-};
+export const createMessageFailed = error => ({
+  type: CREATE_MESSAGE_FAILURE,
+  payload: error
+});
 
-export const updateMessage = data => {
-  return {type: UPDATE_MESSAGE, payload: data};
-};
+export const updateMessage = data => ({type: UPDATE_MESSAGE, payload: data});
 
-export const updateMessageSuccess = data => {
-  return {type: UPDATE_MESSAGE_SUCCESS, payload: data};
-};
+export const updateMessageSuccess = data => ({
+  type: UPDATE_MESSAGE_SUCCESS,
+  payload: data
+});
 
-export const updateMessageFailed = error => {
-  return {type: UPDATE_MESSAGE_FAILURE, payload: error};
-};
+export const updateMessageFailed = error => ({
+  type: UPDATE_MESSAGE_FAILURE,
+  payload: error
+});
 
-export const deleteMessage = data => {
-  return {type: DELETE_MESSAGE, payload: data};
-};
+export const deleteMessage = data => ({type: DELETE_MESSAGE, payload: data});
 
-export const deleteMessageSuccess = data => {
-  return {type: DELETE_MESSAGE_SUCCESS, payload: data};
-};
+export const deleteMessageSuccess = data => ({
+  type: DELETE_MESSAGE_SUCCESS,
+  payload: data
+});
 
-export const deleteMessageFailed = error => {
-  return {type: DELETE_MESSAGE_FAILURE, payload: error};
-};
+export const deleteMessageFailed = error => ({
+  type: DELETE_MESSAGE_FAILURE,
+  payload: error
+});
 
-export const markMessageAsRead = data => {
-  return {type: MARK_MESSAGE_AS_READ, payload: data};
-};
+export const markMessageAsRead = data => ({
+  type: MARK_MESSAGE_AS_READ,
+  payload: data
+});
 
-export const markMessageAsReadSuccess = data => {
-  return {type: MARK_MESSAGE_AS_READ_SUCCESS, payload: data};
-};
+export const markMessageAsReadSuccess = data => ({
+  type: MARK_MESSAGE_AS_READ_SUCCESS,
+  payload: data
+});
 
-export const markMessageAsReadFailed = error => {
-  return {type: MARK_MESSAGE_AS_READ_FAILURE, payload: error};
-};
+export const markMessageAsReadFailed = error => ({
+  type: MARK_MESSAGE_AS_READ_FAILURE,
+  payload: error
+});
 
-export const cleanUpMessageErrors = () => {
-  console.log('juhuuuuuu');
-  return {type: CLEAN_UP_ERRORS, payload: {}};
-};
+export const cleanUpMessageErrors = () => ({
+  type: CLEAN_UP_MESSAGE_ERRORS,
+  payload: {}
+});

@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -7,7 +8,6 @@ import {IconButton, makeStyles} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -15,7 +15,7 @@ import routes from '../../../router/routes';
 import {ReactComponent as Logo} from '../../../assets/svg/logo.svg';
 import {logout} from '../../../redux/actionCreators/UserActionCreators';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     backgroundColor: '#212121'
   },
@@ -45,37 +45,36 @@ function Header({isAuthenticated, logout}) {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const backHandler = () => {
+  function backHandler() {
     if (history.location.pathname !== routes.buildings)
       history.push(routes.buildings);
-  };
+  }
 
-  const goToHomeHandler = () => {
+  function goToHomeHandler() {
     history.push(routes.buildings);
-  };
+  }
 
-  const openProfileMenuHandler = event => {
-    console.log(history.location.pathname);
+  function openProfileMenuHandler(event) {
     setAnchorEl(event.currentTarget);
     setOpen(true);
-  };
+  }
 
-  const closeHandler = () => {
+  function closeHandler() {
     setAnchorEl(null);
     setOpen(false);
-  };
+  }
 
-  const myProfileHandler = () => {
+  function myProfileHandler() {
     setAnchorEl(null);
     setOpen(false);
     // Open profile page
-  };
+  }
 
-  const logoutHandler = () => {
+  function logoutHandler() {
     setAnchorEl(null);
     setOpen(false);
     logout();
-  };
+  }
 
   return (
     <AppBar position="static" className={classes.appBar}>

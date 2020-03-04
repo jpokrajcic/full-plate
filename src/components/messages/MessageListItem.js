@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {withStyles, makeStyles} from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   ExpansionPanelActions,
   Typography,
@@ -9,9 +9,9 @@ import {
   ExpansionPanelDetails,
   ExpansionPanel
 } from '@material-ui/core';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+// import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+// import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+// import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // const ExpansionPanel = withStyles({
@@ -97,11 +97,11 @@ function MessageListItem({message, onReply, onDelete, onOpened}) {
   // Flag for rendering expanded content only when panel actually expanded
   const [expanded, setExpanded] = useState(false);
 
-  const expandHandler = () => {
+  function expandHandler() {
     setExpanded(true);
 
     if (message.read === false) onOpened(message);
-  };
+  }
 
   return (
     <ExpansionPanel

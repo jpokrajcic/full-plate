@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -28,10 +29,16 @@ import TaskIconSelector from './TaskIconSelector';
 import {
   getBuildingTasks,
   changeTaskStatus,
-  cleanUpErrors
+  cleanUpTaskErrors
 } from '../../redux/actionCreators/TaskActionCreators';
-import {getTaskCategories} from '../../redux/actionCreators/TaskCategoryActionCreators';
-import {getBuildingApartments} from '../../redux/actionCreators/ApartmentActionCreators';
+import {
+  getTaskCategories,
+  cleanUpTaskCategoryErrors
+} from '../../redux/actionCreators/TaskCategoryActionCreators';
+import {
+  getBuildingApartments,
+  cleanUpApartmentErrors
+} from '../../redux/actionCreators/ApartmentActionCreators';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -62,12 +69,16 @@ function Tasks({
   getTaskCategories,
   getBuildingApartments,
   changeTaskStatus,
-  cleanUpErrors,
+  cleanUpTaskErrors,
+  cleanUpTaskCategoryErrors,
+  cleanUpApartmentErrors,
   tasks,
   isLoadingTasks,
   isLoadingTaskCategories,
   isLoadingApartments,
-  loadingError,
+  loadingTasksError,
+  loadingTaskCategoriesError,
+  loadingApartmentsError,
   createError,
   updateError,
   deleteError
@@ -79,37 +90,9 @@ function Tasks({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const classes = useStyles();
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
   const location = useLocation();
   const {buildingId} = parse(location.search);
-
-  useEffect(() => {
-    getBuildingTasks({buildingId});
-    getTaskCategories();
-    getBuildingApartments({buildingId});
-  }, []);
-
-  useEffect(() => {
-    setDisplayTasks(tasks);
-    setDrawerOpen(false);
-    applyFilterAndSearch(search, filter);
-  }, [tasks]);
-
-  // Show snack bar notifications (if any)
-  useEffect(() => {
-    if (createError !== '') showSnackBar(createError);
-
-    if (updateError !== '') showSnackBar(updateError);
-
-    if (deleteError !== '') showSnackBar(deleteError);
-  }, [createError, updateError, deleteError]);
-
-  function showSnackBar(message) {
-    enqueueSnackbar(message, {
-      variant: 'error',
-      onClose: () => cleanUpErrors()
-    });
-  }
 
   function applyFilterAndSearch(searchValue, filterValue) {
     let newList = [];
@@ -176,6 +159,50 @@ function Tasks({
     setSelectedTask(newTask);
     setDrawerOpen(true);
   };
+
+  function showSnackBar(message, cleanUpFunction) {
+    enqueueSnackbar(message, {
+      variant: 'error',
+      onClose: () => cleanUpFunction()
+    });
+  }
+
+  useEffect(() => {
+    getBuildingTasks({buildingId});
+    getTaskCategories();
+    getBuildingApartments({buildingId});
+  }, []);
+
+  useEffect(() => {
+    setDisplayTasks(tasks);
+    setDrawerOpen(false);
+    applyFilterAndSearch(search, filter);
+  }, [tasks]);
+
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (createError !== '') showSnackBar(createError, cleanUpTaskErrors);
+
+    if (updateError !== '') showSnackBar(updateError, cleanUpTaskErrors);
+
+    if (deleteError !== '') showSnackBar(deleteError, cleanUpTaskErrors);
+
+    if (loadingTasksError !== '')
+      showSnackBar(loadingTasksError, cleanUpTaskErrors);
+
+    if (loadingTaskCategoriesError !== '')
+      showSnackBar(loadingTaskCategoriesError, cleanUpTaskCategoryErrors);
+
+    if (loadingApartmentsError !== '')
+      showSnackBar(loadingApartmentsError, cleanUpApartmentErrors);
+  }, [
+    createError,
+    updateError,
+    deleteError,
+    loadingTasksError,
+    loadingTaskCategoriesError,
+    loadingApartmentsError
+  ]);
 
   return (
     <div className={classes.root}>
@@ -276,9 +303,13 @@ Tasks.propTypes = {
   getTaskCategories: PropTypes.func.isRequired,
   getBuildingApartments: PropTypes.func.isRequired,
   changeTaskStatus: PropTypes.func.isRequired,
-  cleanUpErrors: PropTypes.func.isRequired,
+  cleanUpTaskErrors: PropTypes.func.isRequired,
+  cleanUpTaskCategoryErrors: PropTypes.func.isRequired,
+  cleanUpApartmentErrors: PropTypes.func.isRequired,
   tasks: PropTypes.instanceOf(Array).isRequired,
-  loadingError: PropTypes.string,
+  loadingTasksError: PropTypes.string,
+  loadingTaskCategoriesError: PropTypes.string,
+  loadingApartmentsError: PropTypes.string,
   createError: PropTypes.string,
   updateError: PropTypes.string,
   deleteError: PropTypes.string,
@@ -287,7 +318,9 @@ Tasks.propTypes = {
   isLoadingApartments: PropTypes.bool.isRequired
 };
 Tasks.defaultProps = {
-  loadingError: '',
+  loadingTasksError: '',
+  loadingTaskCategoriesError: '',
+  loadingApartmentsError: '',
   createError: '',
   updateError: '',
   deleteError: ''
@@ -295,7 +328,9 @@ Tasks.defaultProps = {
 
 const mapStateToProps = state => ({
   tasks: state.taskReducer.tasks,
-  loadingError: state.taskReducer.loadingError,
+  loadingTasksError: state.taskReducer.loadingError,
+  loadingApartmentsError: state.apartmentReducer.loadingError,
+  loadingTaskCategoriesError: state.taskCategoryReducer.loadingError,
   createError: state.taskReducer.createError,
   updateError: state.taskReducer.updateError,
   deleteError: state.taskReducer.deleteError,
@@ -311,7 +346,9 @@ const mapDispatchToProps = dispatch =>
       getTaskCategories,
       getBuildingApartments,
       changeTaskStatus,
-      cleanUpErrors
+      cleanUpTaskErrors,
+      cleanUpTaskCategoryErrors,
+      cleanUpApartmentErrors
     },
     dispatch
   );

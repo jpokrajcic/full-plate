@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useEffect} from 'react';
 import {
   Container,
@@ -11,7 +12,7 @@ import {makeStyles} from '@material-ui/styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import {useLocation, Redirect, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {authorize} from '../../redux/actionCreators/UserActionCreators';
 import routes from '../../router/routes';
 
@@ -40,10 +41,7 @@ function Login({authorize, isAuthenticated, error}) {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [redirectedFrom, setRedirectedFrom] = useState(null);
-  const [hasRedirected, setHasRedirected] = useState(false);
 
-  const location = useLocation();
   const history = useHistory();
 
   useEffect(() => {
@@ -54,18 +52,18 @@ function Login({authorize, isAuthenticated, error}) {
     }
   }, [isAuthenticated]);
 
-  const submitHandler = event => {
+  function submitHandler(event) {
     event.preventDefault();
     authorize({username, password});
-  };
+  }
 
-  const inputChangeHandler = event => {
+  function inputChangeHandler(event) {
     if (event.target.name === 'username') {
       setUsername(event.target.value);
     } else if (event.target.name === 'password') {
       setPassword(event.target.value);
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">

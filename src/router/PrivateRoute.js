@@ -3,10 +3,8 @@ import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import UserReducer from '../redux/reducers/UserReducer';
 
 function PrivateRoute({children, isAuthenticated, ...rest}) {
-  console.log('Privatna ruta');
   return (
     <Route
       {...rest}

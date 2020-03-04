@@ -5,20 +5,13 @@ import {
   GET_BUILDING_TASK_CATEGORIES,
   GET_BUILDING_TASK_CATEGORIES_SUCCESS,
   GET_BUILDING_TASK_CATEGORIES_FAILURE,
-  CREATE_BUILDING,
-  CREATE_BUILDING_SUCCESS,
-  CREATE_BUILDING_FAILURE,
-  UPDATE_BUILDING,
-  UPDATE_BUILDING_SUCCESS,
-  UPDATE_BUILDING_FAILURE,
-  DELETE_BUILDING,
-  DELETE_BUILDING_SUCCESS,
-  DELETE_BUILDING_FAILURE
+  CLEAN_UP_TASK_CATEGORY_ERRORS
 } from '../actionTypes';
 
 const initState = {
   isLoading: true,
-  taskCategories: []
+  taskCategories: [],
+  loadingError: ''
 };
 
 const TaskCategoryReducer = (state = initState, action) => {
@@ -26,20 +19,23 @@ const TaskCategoryReducer = (state = initState, action) => {
     case GET_TASK_CATEGORIES: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loadingError: ''
       };
     }
     case GET_TASK_CATEGORIES_SUCCESS: {
       return {
         ...state,
         taskCategories: action.payload,
-        isLoading: false
+        isLoading: false,
+        loadingError: ''
       };
     }
     case GET_TASK_CATEGORIES_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        loadingError: 'Failed loading task categories'
       };
     }
     case GET_BUILDING_TASK_CATEGORIES: {
@@ -61,68 +57,10 @@ const TaskCategoryReducer = (state = initState, action) => {
         isLoading: false
       };
     }
-    case CREATE_BUILDING: {
+    case CLEAN_UP_TASK_CATEGORY_ERRORS: {
       return {
         ...state,
-        isLoading: true
-      };
-    }
-    case CREATE_BUILDING_SUCCESS: {
-      return {
-        ...state,
-        taskCategories: [...state.taskCategories, action.payload],
-        isLoading: false
-      };
-    }
-    case CREATE_BUILDING_FAILURE: {
-      return {
-        ...state,
-        isLoading: false
-      };
-    }
-    case UPDATE_BUILDING: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case UPDATE_BUILDING_SUCCESS: {
-      return {
-        ...state,
-        taskCategories: state.taskCategories.map(building => {
-          if (building.id === action.payload.id) {
-            return {...action.payload};
-          }
-          return building;
-        }),
-        isLoading: true
-      };
-    }
-    case UPDATE_BUILDING_FAILURE: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case DELETE_BUILDING: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case DELETE_BUILDING_SUCCESS: {
-      return {
-        ...state,
-        taskCategories: state.taskCategories.filter(
-          building => building.id !== action.payload
-        ),
-        isLoading: false
-      };
-    }
-    case DELETE_BUILDING_FAILURE: {
-      return {
-        ...state,
-        isLoading: false
+        loadingError: ''
       };
     }
     default: {

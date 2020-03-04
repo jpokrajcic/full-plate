@@ -10,53 +10,59 @@ import {
   UPDATE_BUILDING_SUCCESS,
   UPDATE_BUILDING_FAILURE,
   DELETE_BUILDING_SUCCESS,
-  DELETE_BUILDING_FAILURE
+  DELETE_BUILDING_FAILURE,
+  CLEAN_UP_BUILDING_ERRORS
 } from '../actionTypes';
 
-export const getBuildings = data => {
-  return {type: GET_BUILDINGS, payload: {data}};
-};
+export const getBuildings = data => ({type: GET_BUILDINGS, payload: {data}});
 
-export const getBuildingsSuccess = data => {
-  return {type: GET_BUILDINGS_SUCCESS, payload: data};
-};
+export const getBuildingsSuccess = data => ({
+  type: GET_BUILDINGS_SUCCESS,
+  payload: data
+});
 
-export const getBuildingsFailed = error => {
-  return {type: GET_BUILDINGS_FAILURE, payload: error};
-};
+export const getBuildingsFailed = error => ({
+  type: GET_BUILDINGS_FAILURE,
+  payload: error
+});
 
-export const createBuilding = data => {
-  return {type: CREATE_BUILDING, payload: data};
-};
+export const createBuilding = data => ({type: CREATE_BUILDING, payload: data});
 
-export const createBuildingSuccess = data => {
-  return {type: CREATE_BUILDING_SUCCESS, payload: data};
-};
+export const createBuildingSuccess = data => ({
+  type: CREATE_BUILDING_SUCCESS,
+  payload: data
+});
 
-export const createBuildingFailed = error => {
-  return {type: CREATE_BUILDING_FAILURE, payload: error};
-};
+export const createBuildingFailed = error => ({
+  type: CREATE_BUILDING_FAILURE,
+  payload: error
+});
 
-export const updateBuilding = data => {
-  return {type: UPDATE_BUILDING, payload: data};
-};
+export const updateBuilding = data => ({type: UPDATE_BUILDING, payload: data});
 
-export const updateBuildingSuccess = data => {
-  return {type: UPDATE_BUILDING_SUCCESS, payload: data};
-};
+export const updateBuildingSuccess = data => ({
+  type: UPDATE_BUILDING_SUCCESS,
+  payload: data
+});
 
-export const updateBuildingFailed = error => {
-  return {type: UPDATE_BUILDING_FAILURE, payload: error};
-};
+export const updateBuildingFailed = error => ({
+  type: UPDATE_BUILDING_FAILURE,
+  payload: error
+});
 
-export const deleteBuilding = data => {
-  return {type: DELETE_BUILDING, payload: data};
-};
+export const deleteBuilding = data => ({type: DELETE_BUILDING, payload: data});
 
-export const deleteBuildingSuccess = data => {
-  return {type: DELETE_BUILDING_SUCCESS, payload: data};
-};
+export const deleteBuildingSuccess = data => ({
+  type: DELETE_BUILDING_SUCCESS,
+  payload: data
+});
 
-export const deleteBuildingFailed = error => {
-  return {type: DELETE_BUILDING_FAILURE, payload: error};
-};
+export const deleteBuildingFailed = error => ({
+  type: DELETE_BUILDING_FAILURE,
+  payload: error
+});
+
+export const cleanUpBuildingErrors = () => ({
+  type: CLEAN_UP_BUILDING_ERRORS,
+  payload: {}
+});

@@ -10,7 +10,8 @@ import {
   UPDATE_BUILDING_FAILURE,
   DELETE_BUILDING,
   DELETE_BUILDING_SUCCESS,
-  DELETE_BUILDING_FAILURE
+  DELETE_BUILDING_FAILURE,
+  CLEAN_UP_BUILDING_ERRORS
 } from '../actionTypes';
 
 const initState = {
@@ -18,8 +19,9 @@ const initState = {
   buildings: [],
   selectedBuilding: null,
   loadingError: '',
-  editorError: '',
-  deletionError: ''
+  createError: '',
+  updateError: '',
+  deleteError: ''
 };
 
 const BuildingReducer = (state = initState, action) => {
@@ -27,47 +29,53 @@ const BuildingReducer = (state = initState, action) => {
     case GET_BUILDINGS: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loadingError: ''
       };
     }
     case GET_BUILDINGS_SUCCESS: {
       return {
         ...state,
         buildings: action.payload,
-        isLoading: false
+        isLoading: false,
+        loadingError: ''
       };
     }
     case GET_BUILDINGS_FAILURE: {
       return {
         ...state,
         isLoading: false,
-        loadingError: action.payload.error
+        loadingError: 'Failed loading buildings!'
       };
     }
     case CREATE_BUILDING: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        createError: ''
       };
     }
     case CREATE_BUILDING_SUCCESS: {
       return {
         ...state,
-        buildings: [...state.buildings, action.payload],
-        isLoading: false
+        buildings: [action.payload, ...state.buildings],
+        isLoading: false,
+        createError: ''
       };
     }
     case CREATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false,
-        editorError: action.payload.error
+        editorError: action.payload.error,
+        createError: 'Failed adding new building!'
       };
     }
     case UPDATE_BUILDING: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        updateError: ''
       };
     }
     case UPDATE_BUILDING_SUCCESS: {
@@ -79,20 +87,23 @@ const BuildingReducer = (state = initState, action) => {
           }
           return building;
         }),
-        isLoading: true
+        isLoading: true,
+        updateError: ''
       };
     }
     case UPDATE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: true,
-        editorError: action.payload.error
+        editorError: action.payload.error,
+        updateError: 'Failed updating building!'
       };
     }
     case DELETE_BUILDING: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        deleteError: ''
       };
     }
     case DELETE_BUILDING_SUCCESS: {
@@ -101,14 +112,24 @@ const BuildingReducer = (state = initState, action) => {
         buildings: state.buildings.filter(
           building => building.id !== action.payload
         ),
-        isLoading: false
+        isLoading: false,
+        deleteError: ''
       };
     }
     case DELETE_BUILDING_FAILURE: {
       return {
         ...state,
         isLoading: false,
-        deletionError: action.payload.error
+        deleteError: 'Fasiled deleting a building!'
+      };
+    }
+    case CLEAN_UP_BUILDING_ERRORS: {
+      return {
+        ...state,
+        createError: '',
+        updateError: '',
+        deleteError: '',
+        loadingError: ''
       };
     }
     default: {

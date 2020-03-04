@@ -14,69 +14,76 @@ import {
   DELETE_TASK_FAILURE,
   CHANGE_TASK_STATUS_SUCCESS,
   CHANGE_TASK_STATUS_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_TASK_ERRORS
 } from '../actionTypes';
 
-export const getBuildingTasks = data => {
-  return {type: GET_BUILDING_TASKS, payload: data};
-};
+export const getBuildingTasks = data => ({
+  type: GET_BUILDING_TASKS,
+  payload: data
+});
 
-export const getBuildingTasksSuccess = data => {
-  return {type: GET_BUILDING_TASKS_SUCCESS, payload: data};
-};
+export const getBuildingTasksSuccess = data => ({
+  type: GET_BUILDING_TASKS_SUCCESS,
+  payload: data
+});
 
-export const getBuildingTasksFailed = error => {
-  return {type: GET_BUILDING_TASKS_FAILURE, payload: error};
-};
+export const getBuildingTasksFailed = error => ({
+  type: GET_BUILDING_TASKS_FAILURE,
+  payload: error
+});
 
-export const createTask = data => {
-  return {type: CREATE_TASK, payload: data};
-};
+export const createTask = data => ({type: CREATE_TASK, payload: data});
 
-export const createTaskSuccess = data => {
-  return {type: CREATE_TASK_SUCCESS, payload: data};
-};
+export const createTaskSuccess = data => ({
+  type: CREATE_TASK_SUCCESS,
+  payload: data
+});
 
-export const createTaskFailed = error => {
-  return {type: CREATE_TASK_FAILURE, payload: error};
-};
+export const createTaskFailed = error => ({
+  type: CREATE_TASK_FAILURE,
+  payload: error
+});
 
-export const updateTask = data => {
-  return {type: UPDATE_TASK, payload: data};
-};
+export const updateTask = data => ({type: UPDATE_TASK, payload: data});
 
-export const updateTaskSuccess = data => {
-  return {type: UPDATE_TASK_SUCCESS, payload: data};
-};
+export const updateTaskSuccess = data => ({
+  type: UPDATE_TASK_SUCCESS,
+  payload: data
+});
 
-export const updateTaskFailed = error => {
-  return {type: UPDATE_TASK_FAILURE, payload: error};
-};
+export const updateTaskFailed = error => ({
+  type: UPDATE_TASK_FAILURE,
+  payload: error
+});
 
-export const deleteTask = data => {
-  return {type: DELETE_TASK, payload: data};
-};
+export const deleteTask = data => ({type: DELETE_TASK, payload: data});
 
-export const deleteTaskSuccess = data => {
-  return {type: DELETE_TASK_SUCCESS, payload: data};
-};
+export const deleteTaskSuccess = data => ({
+  type: DELETE_TASK_SUCCESS,
+  payload: data
+});
 
-export const deleteTaskFailed = error => {
-  return {type: DELETE_TASK_FAILURE, payload: error};
-};
+export const deleteTaskFailed = error => ({
+  type: DELETE_TASK_FAILURE,
+  payload: error
+});
 
-export const changeTaskStatus = data => {
-  return {type: CHANGE_TASK_STATUS, payload: data};
-};
+export const changeTaskStatus = data => ({
+  type: CHANGE_TASK_STATUS,
+  payload: data
+});
 
-export const changeTaskStatusSuccess = data => {
-  return {type: CHANGE_TASK_STATUS_SUCCESS, payload: data};
-};
+export const changeTaskStatusSuccess = data => ({
+  type: CHANGE_TASK_STATUS_SUCCESS,
+  payload: data
+});
 
-export const changeTaskStatusFailed = error => {
-  return {type: CHANGE_TASK_STATUS_FAILURE, payload: error};
-};
+export const changeTaskStatusFailed = error => ({
+  type: CHANGE_TASK_STATUS_FAILURE,
+  payload: error
+});
 
-export const cleanUpErrors = () => {
-  return {type: CLEAN_UP_ERRORS, payload: {}};
-};
+export const cleanUpTaskErrors = () => ({
+  type: CLEAN_UP_TASK_ERRORS,
+  payload: {}
+});

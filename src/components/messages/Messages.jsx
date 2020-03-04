@@ -1,4 +1,5 @@
-import React, {useState, useEffect, Fragment} from 'react';
+/* eslint-disable no-shadow */
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
@@ -73,25 +74,6 @@ function Messages({
   const location = useLocation();
   const {buildingId} = parse(location.search);
 
-  useEffect(() => {
-    getBuildingMessages({buildingId});
-  }, []);
-
-  useEffect(() => {
-    setDisplayMessages(messages);
-    setDrawerOpen(false);
-    applyFilterAndSearch(search, filter);
-  }, [messages]);
-
-  // Show snack bar notifications (if any)
-  useEffect(() => {
-    if (createError !== '') showSnackBar(createError);
-
-    if (markAsReadError !== '') showSnackBar(markAsReadError);
-
-    if (deleteError !== '') showSnackBar(deleteError);
-  }, [createError, deleteError, markAsReadError]);
-
   function showSnackBar(message) {
     enqueueSnackbar(message, {
       variant: 'error',
@@ -132,21 +114,21 @@ function Messages({
     setDisplayMessages(newList);
   }
 
-  const searchChangesHandler = event => {
+  function searchChangesHandler(event) {
     setSearch(event.target.value);
     applyFilterAndSearch(event.target.value, filter);
-  };
+  }
 
-  const filterSelectionHandler = (event, newFilter) => {
+  function filterSelectionHandler(event, newFilter) {
     setFilter(newFilter);
     applyFilterAndSearch(search, newFilter);
-  };
+  }
 
-  const closeDrawer = () => {
+  function closeDrawer() {
     setDrawerOpen(false);
-  };
+  }
 
-  const sendNewHandler = () => {
+  function sendNewHandler() {
     const newMessage = {
       id: -1,
       buildingId,
@@ -156,24 +138,45 @@ function Messages({
     };
     setEditorMessage(newMessage);
     setDrawerOpen(true);
-  };
+  }
 
-  const replyHandler = message => {
+  function replyHandler(message) {
     const replyMessage = {...message};
     replyMessage.title = `Re:${replyMessage.title}`;
     replyMessage.body = '';
     setEditorMessage(replyMessage);
     setDrawerOpen(true);
-  };
+  }
 
-  const deleteHandler = message => {
+  function deleteHandler(message) {
     closeSnackbar();
     deleteMessage({id: message.id});
-  };
+  }
 
-  const messageOpenedHandler = message => {
+  function messageOpenedHandler(message) {
     markMessageAsRead({id: message.id});
-  };
+  }
+
+  useEffect(() => {
+    getBuildingMessages({buildingId});
+  }, []);
+
+  useEffect(() => {
+    setDisplayMessages(messages);
+    setDrawerOpen(false);
+    applyFilterAndSearch(search, filter);
+  }, [messages]);
+
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (createError !== '') showSnackBar(createError);
+
+    if (markAsReadError !== '') showSnackBar(markAsReadError);
+
+    if (deleteError !== '') showSnackBar(deleteError);
+
+    if (loadingError !== '') showSnackBar(loadingError);
+  }, [createError, deleteError, markAsReadError, loadingError]);
 
   return (
     <div className={classes.root}>

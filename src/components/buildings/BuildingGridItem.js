@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Grid, makeStyles, Button} from '@material-ui/core';
@@ -81,17 +81,16 @@ function BuildingGridItem({
   const history = useHistory();
   const [hovering, attributes] = useHover();
 
-  const selectHandler = (event, buildingId) => {
+  function selectHandler(event, buildingId) {
     history.push({
       pathname: routes.tasks,
       search: `?buildingId=${buildingId}`
     });
-  };
+  }
 
-  const editHandler = event => {
+  function editHandler(event) {
     event.stopPropagation();
-    console.log('editHandler');
-  };
+  }
 
   return (
     <Grid

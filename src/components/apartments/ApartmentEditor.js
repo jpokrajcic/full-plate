@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -116,6 +117,38 @@ function ApartmentEditor({
       );
   }, []);
 
+  function saveApartment(values) {
+    const apartmentData = {
+      id: apartment.id,
+      buildingId: apartment.buildingId,
+      number: values.number,
+      lastName: values.lastName,
+      contact: values.contact,
+      size: values.size,
+      adultsCount: values.adultsCount,
+      childrenCount: values.childrenCount,
+      email: values.email,
+      phone: values.phone,
+      mobile: values.mobile,
+      isOccupied: values.isOccupied,
+      rentEnds: values.rentEnds
+    };
+
+    if (apartmentData.id > -1) {
+      updateApartment({apartment: apartmentData});
+    } else {
+      createApartment({apartment: apartmentData});
+    }
+  }
+
+  function cancelHandler() {
+    onCancel();
+  }
+
+  function deleteHandler() {
+    deleteApartment({id: apartment.id});
+  }
+
   const formik = useFormik({
     initialValues: {
       number: apartment.number,
@@ -163,38 +196,6 @@ function ApartmentEditor({
       saveApartment(values);
     }
   });
-
-  function saveApartment(values) {
-    const apartmentData = {
-      id: apartment.id,
-      buildingId: apartment.buildingId,
-      number: values.number,
-      lastName: values.lastName,
-      contact: values.contact,
-      size: values.size,
-      adultsCount: values.adultsCount,
-      childrenCount: values.childrenCount,
-      email: values.email,
-      phone: values.phone,
-      mobile: values.mobile,
-      isOccupied: values.isOccupied,
-      rentEnds: values.rentEnds
-    };
-
-    if (apartmentData.id > -1) {
-      updateApartment({apartment: apartmentData});
-    } else {
-      createApartment({apartment: apartmentData});
-    }
-  }
-
-  function cancelHandler() {
-    onCancel();
-  }
-
-  function deleteHandler() {
-    deleteApartment({id: apartment.id});
-  }
 
   // Display blank editor if apartment is missing
   if (apartment === null || apartment === 'undefined') return null;

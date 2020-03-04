@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -76,6 +77,22 @@ function MessageEditor({createMessage, apartments, message, onCancel}) {
       setApartmentInputLabelWidth(apartmentInputLabel.current.offsetWidth);
   }, []);
 
+  function sendMessage(values) {
+    const messageData = {
+      id: message.id,
+      buildingId: message.buildingId,
+      title: values.title,
+      body: values.body,
+      apartmentId: values.apartmentId
+    };
+
+    createMessage({message: messageData});
+  }
+
+  function cancelHandler() {
+    onCancel();
+  }
+
   const formik = useFormik({
     initialValues: {
       title: message.title,
@@ -95,22 +112,6 @@ function MessageEditor({createMessage, apartments, message, onCancel}) {
       sendMessage(values);
     }
   });
-
-  function sendMessage(values) {
-    const messageData = {
-      id: message.id,
-      buildingId: message.buildingId,
-      title: values.title,
-      body: values.body,
-      apartmentId: values.apartmentId
-    };
-
-    createMessage({message: messageData});
-  }
-
-  function cancelHandler() {
-    onCancel();
-  }
 
   // Display blank editor if message is missing
   if (message === null || message === 'undefined') return null;

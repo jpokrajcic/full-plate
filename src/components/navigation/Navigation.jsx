@@ -29,9 +29,9 @@ function Navigation() {
   const {buildingId} = parse(location.search);
   const [value, setValue] = React.useState(1);
 
-  const tabChangeHandler = (event, newValue) => {
+  function tabChangeHandler(event, newValue) {
     setValue(newValue);
-  };
+  }
 
   let searchParams = '';
   if (buildingId !== '') searchParams = `?buildingId=${buildingId}`;

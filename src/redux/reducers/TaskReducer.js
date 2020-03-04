@@ -14,7 +14,7 @@ import {
   CHANGE_TASK_STATUS,
   CHANGE_TASK_STATUS_SUCCESS,
   CHANGE_TASK_STATUS_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_TASK_ERRORS
 } from '../actionTypes';
 
 const initState = {
@@ -32,7 +32,8 @@ const TaskReducer = (state = initState, action) => {
     case GET_BUILDING_TASKS: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loadingError: ''
       };
     }
     case GET_BUILDING_TASKS_SUCCESS: {
@@ -47,7 +48,7 @@ const TaskReducer = (state = initState, action) => {
       return {
         ...state,
         isLoading: false,
-        loadingError: action.payload
+        loadingError: 'Failed loading tasks!'
       };
     }
     case CREATE_TASK: {
@@ -136,12 +137,13 @@ const TaskReducer = (state = initState, action) => {
         updateError: 'Failed to update task'
       };
     }
-    case CLEAN_UP_ERRORS: {
+    case CLEAN_UP_TASK_ERRORS: {
       return {
         ...state,
         createError: '',
         updateError: '',
-        deleteError: ''
+        deleteError: '',
+        loadingError: ''
       };
     }
     default: {

@@ -1,15 +1,18 @@
+/* eslint-disable no-shadow */
 import React, {useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
+import {useSnackbar} from 'notistack';
 import {Grid, makeStyles, Button, CircularProgress} from '@material-ui/core';
 import Add from '@material-ui/icons/Add';
-import routes from '../../router/routes';
-import {getBuildings} from '../../redux/actionCreators/BuildingActionCreators';
+import {
+  getBuildings,
+  cleanUpBuildingErrors
+} from '../../redux/actionCreators/BuildingActionCreators';
 import BuildingGridItem from './BuildingGridItem';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   addNewButton: {
     margin: '32px 20px 12px 20px',
     width: '200px',
@@ -23,31 +26,44 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Buildings({getBuildings, storeBuildings, loadingError, isLoading}) {
+function Buildings({
+  getBuildings,
+  cleanUpBuildingErrors,
+  storeBuildings,
+  loadingError,
+  isLoading
+}) {
   const classes = useStyles();
-  const history = useHistory();
+  const {enqueueSnackbar} = useSnackbar();
+
+  function addNewHandler() {
+    // const newBuilding = {
+    //   id: -1,
+    //   name: '',
+    //   street: '',
+    //   city: '',
+    //   isSmart: '',
+    //   picture: ''
+    // };
+    // setSelectedBuilding(newBuilding);
+    // setDrawerOpen(true);
+  }
+
+  function showSnackBar(message) {
+    enqueueSnackbar(message, {
+      variant: 'error',
+      onClose: () => cleanUpBuildingErrors()
+    });
+  }
 
   useEffect(() => {
     getBuildings();
   }, []);
 
-  const clickHandler = id => {
-    history.push({pathname: routes.tasks, search: `?buildingId=${id}`});
-  };
-
-  const addNewHandler = () => {
-    const newBuilding = {
-      id: -1,
-      name: '',
-      street: '',
-      city: '',
-      isSmart: '',
-      picture: ''
-    };
-    console.log('addNewHandler');
-    // setSelectedBuilding(newBuilding);
-    // setDrawerOpen(true);
-  };
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (loadingError !== '') showSnackBar(loadingError);
+  }, [loadingError]);
 
   return (
     <div>
@@ -90,6 +106,7 @@ function Buildings({getBuildings, storeBuildings, loadingError, isLoading}) {
 
 Buildings.propTypes = {
   getBuildings: PropTypes.func.isRequired,
+  cleanUpBuildingErrors: PropTypes.func.isRequired,
   storeBuildings: PropTypes.instanceOf(Array).isRequired,
   loadingError: PropTypes.string,
   isLoading: PropTypes.bool.isRequired
@@ -105,6 +122,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({getBuildings}, dispatch);
+  bindActionCreators({getBuildings, cleanUpBuildingErrors}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buildings);

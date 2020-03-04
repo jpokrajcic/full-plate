@@ -11,57 +11,70 @@ import {
   UPDATE_APARTMENT_FAILURE,
   DELETE_APARTMENT_SUCCESS,
   DELETE_APARTMENT_FAILURE,
-  CLEAN_UP_ERRORS
+  CLEAN_UP_APARTMENT_ERRORS
 } from '../actionTypes';
 
-export const getBuildingApartments = data => {
-  return {type: GET_BUILDING_APARTMENTS, payload: data};
-};
+export const getBuildingApartments = data => ({
+  type: GET_BUILDING_APARTMENTS,
+  payload: data
+});
 
-export const getBuildingApartmentsSuccess = data => {
-  return {type: GET_BUILDING_APARTMENTS_SUCCESS, payload: data};
-};
+export const getBuildingApartmentsSuccess = data => ({
+  type: GET_BUILDING_APARTMENTS_SUCCESS,
+  payload: data
+});
 
-export const getBuildingApartmentsFailed = error => {
-  return {type: GET_BUILDING_APARTMENTS_FAILURE, payload: error};
-};
+export const getBuildingApartmentsFailed = error => ({
+  type: GET_BUILDING_APARTMENTS_FAILURE,
+  payload: error
+});
 
-export const createApartment = data => {
-  return {type: CREATE_APARTMENT, payload: data};
-};
+export const createApartment = data => ({
+  type: CREATE_APARTMENT,
+  payload: data
+});
 
-export const createApartmentSuccess = data => {
-  return {type: CREATE_APARTMENT_SUCCESS, payload: data};
-};
+export const createApartmentSuccess = data => ({
+  type: CREATE_APARTMENT_SUCCESS,
+  payload: data
+});
 
-export const createApartmentFailed = error => {
-  return {type: CREATE_APARTMENT_FAILURE, payload: error};
-};
+export const createApartmentFailed = error => ({
+  type: CREATE_APARTMENT_FAILURE,
+  payload: error
+});
 
-export const updateApartment = data => {
-  return {type: UPDATE_APARTMENT, payload: data};
-};
+export const updateApartment = data => ({
+  type: UPDATE_APARTMENT,
+  payload: data
+});
 
-export const updateApartmentSuccess = data => {
-  return {type: UPDATE_APARTMENT_SUCCESS, payload: data};
-};
+export const updateApartmentSuccess = data => ({
+  type: UPDATE_APARTMENT_SUCCESS,
+  payload: data
+});
 
-export const updateApartmentFailed = error => {
-  return {type: UPDATE_APARTMENT_FAILURE, payload: error};
-};
+export const updateApartmentFailed = error => ({
+  type: UPDATE_APARTMENT_FAILURE,
+  payload: error
+});
 
-export const deleteApartment = data => {
-  return {type: DELETE_APARTMENT, payload: data};
-};
+export const deleteApartment = data => ({
+  type: DELETE_APARTMENT,
+  payload: data
+});
 
-export const deleteApartmentSuccess = data => {
-  return {type: DELETE_APARTMENT_SUCCESS, payload: data};
-};
+export const deleteApartmentSuccess = data => ({
+  type: DELETE_APARTMENT_SUCCESS,
+  payload: data
+});
 
-export const deleteApartmentFailed = error => {
-  return {type: DELETE_APARTMENT_FAILURE, payload: error};
-};
+export const deleteApartmentFailed = error => ({
+  type: DELETE_APARTMENT_FAILURE,
+  payload: error
+});
 
-export const cleanUpApartmentErrors = () => {
-  return {type: CLEAN_UP_ERRORS, payload: {}};
-};
+export const cleanUpApartmentErrors = () => ({
+  type: CLEAN_UP_APARTMENT_ERRORS,
+  payload: {}
+});

@@ -1,9 +1,8 @@
 import React from 'react';
 import {Button, makeStyles} from '@material-ui/core';
-import {useHistory, Redirect} from 'react-router-dom';
-import routes from '../../router/routes';
+import {useHistory} from 'react-router-dom';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -15,14 +14,11 @@ function Home() {
   const classes = useStyles();
   const history = useHistory();
 
-  const goToLoginHandler = () => {
-    console.log('bababa');
+  function goToLoginHandler() {
     history.replace({
       pathname: '/login'
     });
-
-    //return <Redirect to="/dashboard" />;
-  };
+  }
 
   return (
     <div className={classes.container}>

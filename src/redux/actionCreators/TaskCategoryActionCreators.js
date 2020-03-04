@@ -13,65 +13,86 @@ import {
   UPDATE_TASK_CATEGORY_SUCCESS,
   UPDATE_TASK_CATEGORY_FAILURE,
   DELETE_TASK_CATEGORY_SUCCESS,
-  DELETE_TASK_CATEGORY_FAILURE
+  DELETE_TASK_CATEGORY_FAILURE,
+  CLEAN_UP_TASK_CATEGORY_ERRORS
 } from '../actionTypes';
 
-export const getTaskCategories = data => {
-  return {type: GET_TASK_CATEGORIES, payload: data};
-};
+export const getTaskCategories = data => ({
+  type: GET_TASK_CATEGORIES,
+  payload: data
+});
 
-export const getTaskCategoriesSuccess = data => {
-  return {type: GET_TASK_CATEGORIES_SUCCESS, payload: data};
-};
+export const getTaskCategoriesSuccess = data => ({
+  type: GET_TASK_CATEGORIES_SUCCESS,
+  payload: data
+});
 
-export const getTaskCategoriesFailed = error => {
-  return {type: GET_TASK_CATEGORIES_FAILURE, payload: error};
-};
+export const getTaskCategoriesFailed = error => ({
+  type: GET_TASK_CATEGORIES_FAILURE,
+  payload: error
+});
 
-export const getBuildingTaskCategories = data => {
-  return {type: GET_BUILDING_TASK_CATEGORIES, payload: data};
-};
+export const getBuildingTaskCategories = data => ({
+  type: GET_BUILDING_TASK_CATEGORIES,
+  payload: data
+});
 
-export const getBuildingTaskCategoriesSuccess = data => {
-  return {type: GET_BUILDING_TASK_CATEGORIES_SUCCESS, payload: data};
-};
+export const getBuildingTaskCategoriesSuccess = data => ({
+  type: GET_BUILDING_TASK_CATEGORIES_SUCCESS,
+  payload: data
+});
 
-export const getBuildingTaskCategoriesFailed = error => {
-  return {type: GET_BUILDING_TASK_CATEGORIES_FAILURE, payload: error};
-};
+export const getBuildingTaskCategoriesFailed = error => ({
+  type: GET_BUILDING_TASK_CATEGORIES_FAILURE,
+  payload: error
+});
 
-export const createTaskCategory = data => {
-  return {type: CREATE_TASK_CATEGORY, payload: data};
-};
+export const createTaskCategory = data => ({
+  type: CREATE_TASK_CATEGORY,
+  payload: data
+});
 
-export const createTaskCategorySuccess = data => {
-  return {type: CREATE_TASK_CATEGORY_SUCCESS, payload: data};
-};
+export const createTaskCategorySuccess = data => ({
+  type: CREATE_TASK_CATEGORY_SUCCESS,
+  payload: data
+});
 
-export const createTaskCategoryFailed = error => {
-  return {type: CREATE_TASK_CATEGORY_FAILURE, payload: error};
-};
+export const createTaskCategoryFailed = error => ({
+  type: CREATE_TASK_CATEGORY_FAILURE,
+  payload: error
+});
 
-export const updateTaskCategory = data => {
-  return {type: UPDATE_TASK_CATEGORY, payload: data};
-};
+export const updateTaskCategory = data => ({
+  type: UPDATE_TASK_CATEGORY,
+  payload: data
+});
 
-export const updateTaskCategorySuccess = data => {
-  return {type: UPDATE_TASK_CATEGORY_SUCCESS, payload: data};
-};
+export const updateTaskCategorySuccess = data => ({
+  type: UPDATE_TASK_CATEGORY_SUCCESS,
+  payload: data
+});
 
-export const updateTaskCategoryFailed = error => {
-  return {type: UPDATE_TASK_CATEGORY_FAILURE, payload: error};
-};
+export const updateTaskCategoryFailed = error => ({
+  type: UPDATE_TASK_CATEGORY_FAILURE,
+  payload: error
+});
 
-export const deleteTaskCategory = data => {
-  return {type: DELETE_TASK_CATEGORY, payload: data};
-};
+export const deleteTaskCategory = data => ({
+  type: DELETE_TASK_CATEGORY,
+  payload: data
+});
 
-export const deleteTaskCategorySuccess = data => {
-  return {type: DELETE_TASK_CATEGORY_SUCCESS, payload: data};
-};
+export const deleteTaskCategorySuccess = data => ({
+  type: DELETE_TASK_CATEGORY_SUCCESS,
+  payload: data
+});
 
-export const deleteTaskCategoryFailed = error => {
-  return {type: DELETE_TASK_CATEGORY_FAILURE, payload: error};
-};
+export const deleteTaskCategoryFailed = error => ({
+  type: DELETE_TASK_CATEGORY_FAILURE,
+  payload: error
+});
+
+export const cleanUpTaskCategoryErrors = () => ({
+  type: CLEAN_UP_TASK_CATEGORY_ERRORS,
+  payload: {}
+});

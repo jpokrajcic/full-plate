@@ -18,46 +18,44 @@ export const authorize = data => ({
   payload: data
 });
 
-export const authorizeSuccess = data => {
-  return {type: AUTH_SUCCESS, payload: data};
-};
+export const authorizeSuccess = data => ({type: AUTH_SUCCESS, payload: data});
 
-export const authorizeFailed = error => {
-  return {type: AUTH_FAILURE, payload: error};
-};
+export const authorizeFailed = error => ({type: AUTH_FAILURE, payload: error});
 
-export const logout = () => {
-  return {type: AUTH_LOGOUT, payload: {}};
-};
+export const logout = () => ({type: AUTH_LOGOUT, payload: {}});
 
-export const logoutSuccess = () => {
-  return {type: AUTH_LOGOUT_SUCCESS, payload: {}};
-};
+export const logoutSuccess = () => ({type: AUTH_LOGOUT_SUCCESS, payload: {}});
 
-export const logoutFailed = error => {
-  return {type: AUTH_LOGOUT_FAILURE, payload: error};
-};
+export const logoutFailed = error => ({
+  type: AUTH_LOGOUT_FAILURE,
+  payload: error
+});
 
-export const getUserProfile = () => {
-  return {type: GET_USER_PROFILE_REQUEST, payload: {}};
-};
+export const getUserProfile = () => ({
+  type: GET_USER_PROFILE_REQUEST,
+  payload: {}
+});
 
-export const getUserProfileSuccess = data => {
-  return {type: GET_USER_PROFILE_SUCCESS, payload: data};
-};
+export const getUserProfileSuccess = data => ({
+  type: GET_USER_PROFILE_SUCCESS,
+  payload: data
+});
 
-export const getUserProfileFailed = error => {
-  return {type: GET_USER_PROFILE_FAILURE, payload: error};
-};
+export const getUserProfileFailed = error => ({
+  type: GET_USER_PROFILE_FAILURE,
+  payload: error
+});
 
-export const changePassword = data => {
-  return {type: CHANGE_PASSWORD_REQUEST, payload: data};
-};
+export const changePassword = data => ({
+  type: CHANGE_PASSWORD_REQUEST,
+  payload: data
+});
 
-export const changePasswordSuccess = data => {
-  return {type: CHANGE_PASSWORD_SUCCESS, payload: data};
-};
-
-export const changePasswordFailed = error => {
-  return {type: CHANGE_PASSWORD_FAILURE, payload: error};
-};
+export const changePasswordSuccess = data => ({
+  type: CHANGE_PASSWORD_SUCCESS,
+  payload: data
+});
+export const changePasswordFailed = error => ({
+  type: CHANGE_PASSWORD_FAILURE,
+  payload: error
+});

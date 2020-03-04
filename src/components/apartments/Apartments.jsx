@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -20,7 +21,6 @@ import {
 } from '@material-ui/core';
 import {ToggleButtonGroup, ToggleButton} from '@material-ui/lab';
 import Search from '@material-ui/icons/Search';
-import Phone from '@material-ui/icons/Phone';
 import Add from '@material-ui/icons/Add';
 import CommentIcon from '@material-ui/icons/Comment';
 import ApartmentFilters from '../../enum/ApartmentFilters';
@@ -92,48 +92,9 @@ function Apartments({
   const [apartmentDrawerOpen, setApartmentDrawerOpen] = useState(false);
   const [messageDrawerOpen, setMessageDrawerOpen] = useState(false);
   const classes = useStyles();
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
   const location = useLocation();
   const {buildingId} = parse(location.search);
-
-  useEffect(() => {
-    getBuildingApartments({buildingId});
-  }, []);
-
-  useEffect(() => {
-    setDisplayApartments(apartments);
-    setApartmentDrawerOpen(false);
-    setMessageDrawerOpen(false);
-    applyFilterAndSearch(search, filter);
-  }, [apartments]);
-
-  useEffect(() => {
-    closeMessageDrawer();
-  }, [messages]);
-
-  // Show snack bar notifications (if any)
-  useEffect(() => {
-    if (createApartmentError !== '') {
-      showSnackBar(createApartmentError, cleanUpApartmentErrors);
-    }
-
-    if (updateApartmentError !== '') {
-      showSnackBar(updateApartmentError, cleanUpApartmentErrors);
-    }
-
-    if (deleteApartmentError !== '') {
-      showSnackBar(deleteApartmentError, cleanUpApartmentErrors);
-    }
-
-    if (createMessageError !== '') {
-      showSnackBar(createMessageError, cleanUpMessageErrors);
-    }
-  }, [
-    createApartmentError,
-    updateApartmentError,
-    deleteApartmentError,
-    createMessageError
-  ]);
 
   function showSnackBar(message, cleanUpFunction) {
     enqueueSnackbar(message, {
@@ -175,30 +136,30 @@ function Apartments({
     setDisplayApartments(newList);
   }
 
-  const searchChangesHandler = event => {
+  function searchChangesHandler(event) {
     setSearch(event.target.value);
     applyFilterAndSearch(event.target.value, filter);
-  };
+  }
 
-  const filterSelectionHandler = (event, newFilter) => {
+  function filterSelectionHandler(event, newFilter) {
     setFilter(newFilter);
     applyFilterAndSearch(search, newFilter);
-  };
+  }
 
-  const closeApartmentDrawer = () => {
+  function closeApartmentDrawer() {
     setApartmentDrawerOpen(false);
-  };
+  }
 
-  const closeMessageDrawer = () => {
+  function closeMessageDrawer() {
     setMessageDrawerOpen(false);
-  };
+  }
 
-  const listSelectionHandler = (event, apartment) => {
+  function listSelectionHandler(event, apartment) {
     setSelectedApartment(apartment);
     setApartmentDrawerOpen(true);
-  };
+  }
 
-  const replyHandler = (event, apartment) => {
+  function replyHandler(event, apartment) {
     const newMessage = {
       id: -1,
       buildingId,
@@ -208,9 +169,9 @@ function Apartments({
     };
     setEditorMessage(newMessage);
     setMessageDrawerOpen(true);
-  };
+  }
 
-  const addNewHandler = () => {
+  function addNewHandler() {
     const newApartment = {
       id: -1,
       buildingId,
@@ -228,7 +189,51 @@ function Apartments({
     };
     setSelectedApartment(newApartment);
     setApartmentDrawerOpen(true);
-  };
+  }
+
+  useEffect(() => {
+    getBuildingApartments({buildingId});
+  }, []);
+
+  useEffect(() => {
+    setDisplayApartments(apartments);
+    setApartmentDrawerOpen(false);
+    setMessageDrawerOpen(false);
+    applyFilterAndSearch(search, filter);
+  }, [apartments]);
+
+  useEffect(() => {
+    closeMessageDrawer();
+  }, [messages]);
+
+  // Show snack bar notifications (if any)
+  useEffect(() => {
+    if (createApartmentError !== '') {
+      showSnackBar(createApartmentError, cleanUpApartmentErrors);
+    }
+
+    if (updateApartmentError !== '') {
+      showSnackBar(updateApartmentError, cleanUpApartmentErrors);
+    }
+
+    if (deleteApartmentError !== '') {
+      showSnackBar(deleteApartmentError, cleanUpApartmentErrors);
+    }
+
+    if (createMessageError !== '') {
+      showSnackBar(createMessageError, cleanUpMessageErrors);
+    }
+
+    if (loadingError !== '') {
+      showSnackBar(loadingError, cleanUpMessageErrors);
+    }
+  }, [
+    createApartmentError,
+    updateApartmentError,
+    deleteApartmentError,
+    createMessageError,
+    loadingError
+  ]);
 
   return (
     <div className={classes.root}>
