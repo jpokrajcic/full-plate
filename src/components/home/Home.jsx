@@ -15,14 +15,13 @@ function Home() {
   const history = useHistory();
 
   function goToLoginHandler() {
-    history.replace({
-      pathname: '/login'
-    });
+    history.replace({pathname: '/login'});
   }
 
   return (
     <div className={classes.container}>
       <h1>HOME PAGE</h1>
+      <span>only test</span>
       <Button color="primary" onClick={goToLoginHandler} variant="contained">
         Log in
       </Button>
