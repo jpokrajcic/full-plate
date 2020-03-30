@@ -18,7 +18,8 @@ const initState = {
   sessionToken: null,
   isAuthenticated: false,
   userProfile: {},
-  error: ''
+  loginError: '',
+  logoutError: ''
 };
 
 const UserReducer = (state = initState, action) => {
@@ -26,7 +27,8 @@ const UserReducer = (state = initState, action) => {
     case AUTH_REQUEST: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        loginError: ''
       };
     }
     case AUTH_SUCCESS: {
@@ -34,20 +36,22 @@ const UserReducer = (state = initState, action) => {
         ...state,
         isAuthenticated: true,
         sessionToken: action.payload,
-        isLoading: false
+        isLoading: false,
+        loginError: ''
       };
     }
     case AUTH_FAILURE: {
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error
+        loginError: action.payload
       };
     }
     case AUTH_LOGOUT: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        logoutError: ''
       };
     }
     case AUTH_LOGOUT_SUCCESS: {
@@ -56,13 +60,15 @@ const UserReducer = (state = initState, action) => {
         sessionToken: '',
         isAuthenticated: false,
         userProfile: {},
-        isLoading: false
+        isLoading: false,
+        logoutError: ''
       };
     }
     case AUTH_LOGOUT_FAILURE: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        logoutError: action.payload
       };
     }
     case GET_USER_PROFILE_REQUEST: {

@@ -1,6 +1,6 @@
 const endpoints = {
-  urlBase: 'http://192.168.0.27:8080/rest/v1/user/',
-  urlAnon: 'http://192.168.0.27:8080/rest/v1/anon/',
+  urlBase: 'http://192.168.0.37:8080/rest/v1/user/',
+  urlAnon: 'http://192.168.0.37:8080/rest/v1/anon/',
   // urlBase: 'http://192.168.1.7:8080/rest/v1/user/',
   // urlAnon: 'http://192.168.1.7:8080/rest/v1/anon/',
   login: 'login',

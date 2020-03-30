@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Login({authorize, isAuthenticated, error}) {
+function Login({authorize, isAuthenticated, loginError}) {
   const classes = useStyles();
 
   const [username, setUsername] = useState('');
@@ -107,6 +107,7 @@ function Login({authorize, isAuthenticated, error}) {
             Log in
           </Button>
         </form>
+        {loginError !== '' ? <span>{loginError}</span> : null}
       </div>
     </Container>
   );
@@ -115,15 +116,15 @@ function Login({authorize, isAuthenticated, error}) {
 Login.propTypes = {
   authorize: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  error: PropTypes.string
+  loginError: PropTypes.string
 };
 Login.defaultProps = {
-  error: ''
+  loginError: ''
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.userReducer.isAuthenticated,
-  error: state.userReducer.error
+  loginError: state.userReducer.loginError
 });
 const mapDispatchToProps = dispatch =>
   bindActionCreators({authorize}, dispatch);
